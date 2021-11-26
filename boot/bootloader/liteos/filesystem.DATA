@@ -1,0 +1,91 @@
+#!/bin/bash
+function LITE_FILESYS() {
+	export defaultLocation="$USERDATA"
+	println "==========================="
+	println "LiteOS File System Explorer"
+	println "     Unlocked for Pro"
+	println "==========================="
+	println ""
+	println "Type \"help\" to see availabe commands."
+	println ""
+	export location="$ROOTFS"
+	while [[ true ]]; do
+		cd "$location"
+		print "Execute > "
+		read query
+		# if [[ "$query" == "cache set element access to full at disk physicaldisk1" ]]; then
+		# 	export syswrite=1
+		# el
+		if [[ "$query" == "help" ]]; then
+			println "delete [file]: Delete specified file / directory"
+			println "edit [file]  : Edit specified file"
+			println "list         : Shows files in working directory"
+			println "new [file]   : Create new file in working directory with specified name"
+			println "newd [dir]   : Create new directory with specified name"
+			println "cd [dir]     : Changes working directory"
+			println "exit         : Exits file explorer"
+		else
+			export statement=($query)
+			if [[ "${statement[0]}" == "delete" ]]; then
+				if [[ ! -z "${statement[1]}" ]] && [[ -e "$location/${statement[1]}" ]]; then
+					# if [[ ! -z "$(println "$location/${statement[1]}" | grep "$SYSTEM")" ]] && [[ "$syswrite" -ne "1" ]]; then
+					# 	println "Unable to use fs_write on specified location."
+					# else
+						rm -rf "$location/${statement[1]}"
+					# fi
+				else
+					println "File / directory not found."
+				fi
+			elif [[ "${statement[0]}" == "edit" ]]; then
+				if [[ ! -z "${statement[1]}" ]] && [[ -f "$location/${statement[1]}" ]]; then
+					# if [[ ! -z "$(println "$location/${statement[1]}" | grep "$SYSTEM")" ]] && [[ "$syswrite" -ne "1" ]]; then
+					# 	println "Unable to use fs_write on specified location."
+					# else
+						nano "$location/${statement[1]}"
+					# fi
+				else
+					println "File not found."
+				fi
+			elif [[ "${statement[0]}" == "new" ]]; then
+				if [[ ! -z "${statement[1]}" ]] && [[ ! -e "$location/${statement[1]}" ]]; then
+					# if [[ ! -z "$(println "$location/${statement[1]}" | grep "$SYSTEM")" ]] && [[ "$syswrite" -ne "1" ]]; then
+					# 	println "Unable to use fs_write on specified location."
+					# else
+						touch "$location/${statement[1]}"
+					# fi
+				else
+					println "File / directory exists."
+				fi
+			elif [[ "${statement[0]}" == "newd" ]]; then
+				if [[ ! -z "${statement[1]}" ]] && [[ ! -e "$location/${statement[1]}" ]]; then
+					# if [[ ! -z "$(println "$location/${statement[1]}" | grep "$SYSTEM")" ]] && [[ "$syswrite" -ne "1" ]]; then
+					# 	println "Unable to use fs_write on specified location."
+					# else
+						mkdir -p "$location/${statement[1]}"
+					# fi
+				else
+					println "File / directory exists."
+				fi
+			elif [[ "${statement[0]}" == "cd" ]]; then
+				if [[ ! -z "${statement[1]}" ]] && [[ -d "$location/${statement[1]}" ]]; then
+					cd "$location/${statement[1]}"
+					if [[ -z "$(println "$ROOTFS" | grep "$(pwd)")" ]]; then
+						export location="$(pwd)"
+					else
+						println "Unaccessible location."
+					fi
+				else
+					println "Directory not found."
+				fi
+			elif [[ "${statement[0]}" == "list" ]]; then
+				ls -1 "$location"
+			elif [[ "${statement[0]}" == "exit" ]]; then
+				break
+			else
+				println "Command not found."
+			fi
+		fi
+	done
+}
+
+export -f LITE_FILESYS

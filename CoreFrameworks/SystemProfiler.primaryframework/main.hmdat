@@ -1,0 +1,6 @@
+#!/bin/bash
+export OSVersion="20.0 Alpha 1"
+export OSName="Hermes Pro"
+export OSCodeName="Helium"
+export OSBuild=1
+export OSTag="20.0pro-alpha1"

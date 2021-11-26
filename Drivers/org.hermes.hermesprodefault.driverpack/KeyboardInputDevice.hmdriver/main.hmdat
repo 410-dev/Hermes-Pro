@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function singleline_input() {
+	read inp
+	echo "$inp"
+}
+
+function singleline_secure_input() {
+	read -s inp
+	echo "$inp"
+}
+
+export -f singleline_input
+export -f singleline_secure_input

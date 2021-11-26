@@ -1,0 +1,31 @@
+#!/bin/bash
+
+function LITE_INSTALL() {
+	if [[ -d "$SYSLOC/sysorig" ]]; then
+		println "Using local package..."
+		println "Installing..."
+		cp -r "$SYSLOC/sysorig/System" "$ROOTFS"
+	else
+		println "System package not found."
+		println "Downloading system packages..."
+		colorprint "${YELLOW}Package will be downloaded to current disk."
+		colorprint "${YELLOW}Hermes Pro is not ready for stable repository. It will be prepared in near future."
+		colorprint "${YELLOW}Alternatively, LiteOS will install HermesOS stable version (15.0), then install Hermes Pro manually."
+		colorprint "${RED}ATTENTION: Disk structure may not be compatible with HermesOS and Hermes Pro which may lead to difficulties in boot."
+		colorprint "${RED}In such case, try rebooting multiple times, then LiteOS will automaticallly started. In LiteOS, erase all the disk and reinstall the OS."
+		if [[ -d "$SYSTEM" ]]; then
+			rm -rf "$SYSTEM"
+		fi
+		mkdir -p "$SYSTEM/recovery_dimg"
+		curl -L --progress-bar "https://github.com/410-dev/HermesOS/releases/download/15.0/image.zip" -o "$SYSTEM/recovery_dimg/image.zip"
+		if [[ $? -ne 0 ]]; then
+			println "Failed downloading/saving HermesOS 15.0."
+		else
+			println "Installing HermesOS 15.0..."
+			unzip -o -q "$SYSTEM/recovery_dimg/image.zip" -d "$SYSTEM"
+		fi
+	fi
+	colorprint "${GREEN}Done."
+}
+
+export -f LITE_INSTALL

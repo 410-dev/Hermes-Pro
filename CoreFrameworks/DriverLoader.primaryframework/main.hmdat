@@ -1,0 +1,25 @@
+#!/bin/bash
+cd "$SYSTEM/Drivers"
+for package in *.driverpack; do
+    cd "$SYSTEM/Drivers/$package"
+    for i in *.hmdriver; do
+        verbose "[*] Loading driver: $i"
+        if [ -d "$i" ]; then
+            if [[ -f "$i/meta_key/info/buildtype/pro_native" ]]; then
+                if [[ "$(<"$i/meta_key/info/buildtype/pro_native")" == "$DRIVER_COMPATIBILITY" ]]; then
+                    if [ -f "$i/main.hmdat" ]; then
+                        source "$i/main.hmdat" "$PWD/$i"
+                    else
+                        verbose "[-] Driver $i is not loaded because it is not in a readable format."
+                    fi
+                else
+                    verbose "[-] Driver $i is not loaded because it is not compatible with this build. (Required: $DRIVER_COMPATIBILITY | Driver: "$(<"$i/meta_key/info/buildtype/pro_native")")"
+                fi
+            else
+                verbose "[-] Driver $i is not loaded because it is not a native build."
+            fi
+        else
+            verbose "[-] Driver $i is not loaded because it is not in a readable format."
+        fi
+    done
+done

@@ -1,0 +1,49 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/../"
+pth="$PWD/System"
+
+echo "Sync start."
+rm -rf "$PWD/System"
+mkdir -p "$PWD/System"
+cp -r "$PWD/Source/" "$PWD/System/"
+rm -rf "$PWD/System/.git"
+rm -rf "$PWD/System/.gitattributes"
+rm -rf "$PWD/System/.gitignore"
+rm -rf "$PWD/System/README.md"
+rm -rf "$PWD/System/compileandrun"
+echo "Sync done."
+
+# .sh
+LIST=$(find "$pth" -name *.sh -depth)
+echo "$LIST" | while read line
+do
+	cd "$(dirname "$line")"
+	echo "PROCESSING: $line"
+	shc -r -f "$line" 2>/dev/null
+	gcc "$line.x.c" -o "$line"
+	name=$(echo "$line" | cut -f 1 -d '.')
+	mv "$name.sh" "$name" 2>/dev/null
+done
+find "$pth" -name *.sh.x.c -depth -exec rm {} \;
+
+# .hmexec
+LIST=$(find "$pth" -name *.sh -depth)
+echo "$LIST" | while read line
+do
+	name=$(echo "$line" | cut -f 1 -d '.')
+	chmod +x "$name.hmexec/main.sh" 2>/dev/null
+	mv "$name.hmexec/main.sh" "$name.hmexec/main" 2>/dev/null
+done
+
+
+
+cd "$pth"
+
+if [[ "$1" == "norun" ]]; then
+	exit 0
+elif [[ "$1" == "pkg" ]]; then
+	zip -rq "image.zip" . -x ".*" -x "__MACOSX"
+	exit 0
+fi
+"$PWD/boot/init" "$1" "$2" "$3" "$4" "$5" "$6"

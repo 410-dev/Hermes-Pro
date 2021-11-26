@@ -1,0 +1,55 @@
+#!/bin/bash
+
+function bundle_start() {
+    if [[ -z "$1" ]]; then
+        verbose "Usage: bundle_start <location> [arguments]"
+        return 111
+    elif [[ ! -d "$1" ]]; then
+        verbose "Executable bundle not found: $1"
+        return 111
+    elif [[ ! -f "$1/main" ]]; then
+        verbose "Executor inside bundle not found: $1"
+        return 111
+    else
+        cd "$1"
+        if [[ -f "meta.hmdat" ]]; then
+            source "meta.hmdat"
+            if [[ "$BUNDLE_EXECUTIVE" == "HeliumNative" ]]; then
+                ./main "$PWD" "${@:2}"
+            else
+                echo "[-] Bundle $1 is not loaded because it is not a compatible architecture."
+            fi
+        else
+            echo "[-] Bundle $1 is not loaded because it is not in a readable format."
+            return 111
+        fi
+    fi
+}
+
+function bundle_read() {
+    if [[ -z "$1" ]]; then
+        echo "Usage: bundle_start <location> [arguments]"
+        return 111
+    elif [[ ! -d "$1" ]]; then
+        echo "Executable bundle not found: $1"
+        return 111
+    elif [[ ! -f "$1/main" ]]; then
+        echo "Executable bundle not found: $1"
+        return 111
+    else
+        cd "$1"
+        if [[ -f "meta.hmdat" ]]; then
+            source "meta.hmdat"
+            if [[ "$BUNDLE_EXECUTIVE" == "HeliumNative" ]]; then
+                source "main.hmdat" "$PWD" "${@:2}"
+            else
+                echo "[-] Bundle $1 is not loaded because it is not a compatible architecture."
+            fi
+        else
+            echo "[-] Bundle $1 is not loaded because it is not in a readable format."
+            return 111
+        fi
+    fi
+}
+
+export -f bundle_start

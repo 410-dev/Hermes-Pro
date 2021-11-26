@@ -1,0 +1,39 @@
+#!/bin/bash
+function liteos_main() {
+	println "LiteOS - Main Shell"
+	println "Type LITE_HELP to see available commands."
+	unset selectedDisk
+	while [[ true ]]; do
+		print "LITEOS > "
+		read commands
+		if 
+		[[ "$commands" == "LITE_HELP" ]] || 
+		[[ "$commands" == "LITE_LOG" ]] || 
+		[[ "$commands" == "LITE_FILESYS" ]] || 
+		[[ "$commands" == "LITE_ERASE_ALL" ]] || 
+		[[ "$commands" == "LITE_INSTALL" ]]; then
+			"$commands"
+		elif [[ "$commands" == "shutdown" ]]; then
+			if [[ ! -f "$CORE/extensions/Profile.hmref" ]]; then
+				println "It seems OS is not installed properly! Are you sure you want to shut down? Y/n"
+				print "> "
+				read yn
+				if [[ "$yn" == "Y" ]] || [[ "$yn" == "y" ]]; then
+					rm -rf "$SYSCAC"
+					LITE_CLEAR
+					break
+				else
+					println "Shutdown aborted."
+				fi
+			else
+				rm -rf "$SYSCAC"
+				LITE_CLEAR
+				break
+			fi
+		else
+			println "Command not found."
+		fi
+	done
+}
+
+export -f liteos_main

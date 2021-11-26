@@ -1,0 +1,52 @@
+#!/bin/bash
+function LITE_EXTERN_BOOT() {
+	print ""
+}
+
+function LITE_START() {
+	clear
+	sys_log "LiteOS" "Entered menu."
+	println "LiteOS Menu"
+	println "==================="
+	println "1. Enter Hermes Pro"
+	println "2. Enter LiteOS"
+	println "3. Start from external storage"
+	println "4. Custom boot arguments"
+	print "> "
+	read in
+	if [[ "$in" == "1" ]]; then
+		sys_log "LiteOS" "Option 1 selected - Entering Hermes Pro..."
+		println "Entering Hermes Pro..."
+		LITE_BOOT_SYSTEM
+	elif [[ "$in" == "2" ]]; then
+		clear
+		sys_log "LiteOS" "Option 2 selected - Starting LiteOS Console..."
+		println "Starting LiteOS console..."
+		liteos_main
+	elif [[ "$in" == "3" ]]; then
+		sys_log "LiteOS" "Option 3 selected - Starting system from external device..."
+		sys_log "LiteOS" "Warning: System log may not present during this stage!"
+		LITE_EXTERN_BOOT
+		sys_log "LiteOS" "Process from external device is done."
+	elif [[ "$in" == "4" ]]; then
+		println "Usable arguments: "
+		println ""
+		println "verbose" # Do verbose mode
+		println "colorless" # In color driver, check this flag then run color print. If the flag is present, don't color print - just println it.
+		println "safe-mode" # For driver: Just don't load except for default.     For 3rd-party programs: All internal commands should live in MEMORY. Loading from disk should be disabled.
+		println "no-cache-reset" # [Complete] Don't reset cache in Library
+		println "no-crash-enforcement" # [Complete] Don't enforce crash handler
+		println ""
+		println ""
+		print "Boot argument > "
+		read BOOTARGS
+		LITE_BOOT_SYSTEM
+	else
+		sys_log "LiteOS" "Invalid option: $in - Continuing to default setting..."
+		println "Invalid option. Continuing to default setting..."
+		LITE_BOOT_SYSTEM
+	fi
+}
+
+export -f LITE_EXTERN_BOOT
+export -f LITE_START
