@@ -26,6 +26,10 @@ function LITE_BOOT_SYSTEM() {
 			if [[ "$?" == 0 ]]; then
 				sys_log "boot" "Shutdown signal received..."
 				break
+			elif [[ "$?" == 127 ]]; then
+				sys_log "boot" "System Crash!"
+				verbose "[!] System Crash!!"
+				break
 			fi
 			if [[ -f "$NVRAM/boot-arguments" ]]; then
 				export BOOTARGS="$(<"$NVRAM/boot-arguments")"
