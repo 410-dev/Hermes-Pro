@@ -28,5 +28,3 @@ if [[ -f "$1/subbuilder/postinstall.sh" ]]; then
     verbose "[*] Running postinstall script..."
     "$1/subbuilder/postinstall.sh"
 fi
-
-bundle_start "$SYSTEM/CoreExecutives/UserShell.hmexec"
