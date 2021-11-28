@@ -1,0 +1,4 @@
+export DISPLAY_DRIVER_NAME="Hermes Pro Generic Color Display"
+export DISPLAY_DRIVER_VERSION="1.0"
+export DISPLAY_DRIVER_INFO=""
+export DISPLAY_NAME=""

@@ -1,0 +1,6 @@
+export CPU_DRIVER_NAME="Hermes Pro Generic Processor"
+export CPU_DRIVER_VERSION="1.0"
+export CPU_NAME=""
+export CPU_VENDOR="Hermes Pro"
+export CPU_VOLTAGE="3.3V"
+export CPU_FREQUENCY="2.0GHz"

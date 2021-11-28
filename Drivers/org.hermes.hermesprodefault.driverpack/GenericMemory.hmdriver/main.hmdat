@@ -1,0 +1,24 @@
+#!/bin/bash
+verbose "[!] Warning: Driver for memory is an emulated driver. If available, it is recommended to use the manufacturer's official driver."
+
+mkdir -p "$CACHE/EmulatedMemory"
+
+function setAddressToMD5Str() {
+    echo "$(md5 -qs "$1")"
+}
+
+function memwrite() {
+    echo "$2" > "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
+}
+
+function memread() {
+    cat "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
+}
+
+function memdelete() {
+    rm "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
+}
+
+export -f memwrite
+export -f memread
+export -f memdelete
