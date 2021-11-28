@@ -1,0 +1,7 @@
+#!/bin/bash
+function Security.elevatePrivilege() {
+	@import NullAction
+	NullAction.doNothing | sudo -s
+}
+
+export -f Security.elevatePrivilege

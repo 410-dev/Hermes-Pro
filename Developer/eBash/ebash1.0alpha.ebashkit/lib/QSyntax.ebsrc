@@ -1,0 +1,238 @@
+#!/bin/bash
+@import Foundation/exception
+@import Files/check
+@import Files/remove
+@import Files/create
+@import Foundation/string
+@import Foundation/out
+@import Foundation/int
+
+function create() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "(QSyntax)create - type not given."
+	fi
+	if [[ $(isNull "$2") ]]; then
+		syntaxException "(QSyntax)create - specification keywork not given."
+	fi
+	if [[ $(isNull "$3") ]]; then
+		syntaxException "(QSyntax)create - path not given."
+	fi
+	if  [[ $(isNull "$4") ]]; then
+		syntaxException "(QSyntax)create - specification keywork not given."
+	fi
+	if  [[ $(isNull "$5") ]]; then
+		syntaxException "(QSyntax)create - name not given."
+	fi
+
+
+	if [[ "$1" == "directory" ]]; then
+		if [[ $(Files.isFile "$3") ]]; then
+			runtimeException "(QSyntax)create directory - given path is not directory."
+		elif [[ $(Files.isDirectory "$3/$5") ]]; then
+			runtimeException "(QSyntax)create directory - directory already exists in the given path."
+		else
+			Files.createDirectory "$3/$5"
+			if [[ ! $(Files.isDirectory "$3/$5") ]]; then
+				runtimeException "(QSyntax)create directory - failed creating a directory."
+			fi
+		fi
+	elif [[ "$1" == "file" ]]; then
+		if [[ $(Files.isFile "$3") ]]; then
+			runtimeException "(QSyntax)create file - given path is not directory."
+		elif [[ $(Files.isFile "$3/$5") ]]; then
+			runtimeException "(QSyntax)create file - file already exists in the given path."
+		else
+			if [[ $(isNull "$6") ]]; then
+				Files.createFile "$3/$5"
+				if [[ ! $(Files.isFile "$3/$5") ]]; then
+					runtimeException "(QSyntax)create file - failed creating a file."
+				fi
+			else
+				if [[ "$6" == "with" ]] && [[ "$7" == "content" ]] && [[ "$8" == "of" ]] && [[ ! $(isNull "$9") ]]; then
+					Files.createFile "$3/$5" "$9"
+					if [[ ! $(Files.isFile "$3/$5") ]]; then
+						runtimeException "(QSyntax)create file - failed creating a file."
+					fi
+				else
+					syntaxException "(QSyntax)create - specification keywork not given, or incorrect."
+				fi
+			fi
+		fi
+	else
+		syntaxException "(QSyntax)create - unsupported create type: $1"
+	fi
+}
+
+function remove() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "(QSyntax)remove - type not given."
+	fi
+	if [[ $(isNull "$2") ]]; then
+		syntaxException "(QSyntax)remove - specification keywork not given."
+	fi
+	if [[ $(isNull "$3") ]]; then
+		syntaxException "(QSyntax)remove - path not given."
+	fi
+
+	if [[ "$1" == "directory" ]]; then
+		if [[ ! $(Files.isDirectory "$3") ]]; then
+			runtimeException "(QSyntax)remove directory - given path is not directory, or does not exist."
+		else
+			Files.removeDirectory "$3"
+			if [[ $(Files.isDirectory "$3") ]]; then
+				runtimeException "(QSyntax)remove directory - failed removing the directory."
+			fi
+		fi
+	elif [[ "$1" == "file" ]]; then
+		if [[ ! $(Files.isFile "$3") ]]; then
+			runtimeException "(QSyntax)remove file - given path is not file, or does not exist."
+		else
+			Files.removeFile "$3"
+			if [[ $(Files.isFile "$3") ]]; then
+				runtimeException "(QSyntax)remove file - failed removing the file."
+			fi
+		fi
+	elif [[ "$1" == "anything" ]]; then
+		if [[ ! $(Files.exists "$3") ]]; then
+			runtimeException "(QSyntax)remove anything - given path does not exist."
+		else
+			Files.removeDirectory "$3"
+			if [[ $(Files.exists "$3") ]]; then
+				runtimeException "(QSyntax)remove anything - failed removing."
+			fi
+		fi
+	else
+		syntaxException "(QSyntax)remove - unsupported remove type: $1"
+	fi
+}
+
+function runif() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "(QSyntax)runif - condition type not given."
+	fi
+	if [[ $(isNull "$2") ]]; then
+		syntaxException "(QSyntax)runif - condition not given."
+	fi
+	if [[ $(isNull "$3") ]]; then
+		if [[ "$1" == "file" ]] || [[ "$1" == "directory" ]] || [[ "$1" == "any" ]]; then
+			syntaxException "(QSyntax)runif - script not given."
+		else
+			syntaxException "(QSyntax)runif - broken condition structure"
+		fi
+	fi
+	if [[ "$1" == "file" ]] || [[ "$1" == "directory" ]] || [[ "$1" == "any" ]]; then
+		if [[ "$1" == "file" ]]; then
+			if [[ $(Files.isFile "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		elif [[ "$1" == "directory" ]]; then
+			if [[ $(Files.isDirectory "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		else
+			if [[ $(Files.exists "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		fi
+	else
+		if [[ $(isNull "$3") ]] || [[ $(isNull "$4") ]]; then
+			syntaxException "(QSyntax)runif - broken condition structure"
+		else
+			if [[ $(isNull "$5") ]]; then
+				syntaxException "(QSyntax)runif - script not given."
+			else
+				if [[ "$3" == "=" ]]; then
+					if [[ "$2" == "$4" ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				elif [[ "$4" == "larger" ]]; then
+					int p1 $2
+					int p2 $4
+					if [[ $(isFrontGreater "$p1" "$p2") ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				else
+					int p1 $2
+					int p2 $4
+					if [[ $(isFrontGreater "$p2" "$p1") ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				fi
+			fi
+		fi
+	fi
+}
+
+function runifnot() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "(QSyntax)runifnot - condition type not given."
+	fi
+	if [[ $(isNull "$2") ]]; then
+		syntaxException "(QSyntax)runifnot - condition not given."
+	fi
+	if [[ $(isNull "$3") ]]; then
+		if [[ "$1" == "file" ]] || [[ "$1" == "directory" ]] || [[ "$1" == "any" ]]; then
+			syntaxException "(QSyntax)runifnot - script not given."
+		else
+			syntaxException "(QSyntax)runifnot - broken condition structure"
+		fi
+	fi
+	if [[ "$1" == "file" ]] || [[ "$1" == "directory" ]] || [[ "$1" == "any" ]]; then
+		if [[ "$1" == "file" ]]; then
+			if [[ ! $(Files.isFile "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		elif [[ "$1" == "directory" ]]; then
+			if [[ ! $(Files.isDirectory "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		else
+			if [[ ! $(Files.exists "$2") ]]; then
+				command=($3)
+				"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+			fi
+		fi
+	else
+		if [[ $(isNull "$3") ]] || [[ $(isNull "$4") ]]; then
+			syntaxException "(QSyntax)runifnot - broken condition structure"
+		else
+			if [[ $(isNull "$5") ]]; then
+				syntaxException "(QSyntax)runifnot - script not given."
+			else
+				if [[ "$3" == "=" ]]; then
+					if [[ "$2" -ne "$4" ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				elif [[ "$3" == "larger" ]]; then
+					int p1 $2
+					int p2 $4
+					if [[ $(isFrontGreater "$p2" "$p1") ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				else
+					int p1 $2
+					int p2 $4
+					if [[ $(isFrontGreater "$p1" "$p2") ]]; then
+						command=($5)
+						"${command[0]}" "${command[1]}" "${command[2]}" "${command[3]}" "${command[4]}" "${command[5]}" "${command[6]}" "${command[7]}" "${command[8]}" "${command[9]}"
+					fi
+				fi
+			fi
+		fi
+	fi
+}
+
+export -f create
+export -f remove
+export -f runif
+export -f runifnot

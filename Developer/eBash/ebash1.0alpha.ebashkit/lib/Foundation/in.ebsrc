@@ -1,0 +1,15 @@
+#!/bin/bash
+function input() {
+	read return
+	echo "$return"
+}
+
+function secureInput() {
+	read -s return
+	export parse=($(echo "$return" | shasum -a 512))
+	echo "${parse[0]}"
+	unset return
+}
+
+export -f input
+export -f secureInput

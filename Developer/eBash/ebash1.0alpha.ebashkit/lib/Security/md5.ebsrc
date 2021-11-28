@@ -1,0 +1,26 @@
+#!/bin/bash
+@import Foundation/exception
+@import Foundation/string
+
+function Security.stringToMD5() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "Security.stringToMD5 - Parameter is not properly given."
+	else
+		md5 -qs "$1"
+	fi
+}
+
+function Security.fileToMD5() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "Security.fileToMD5 - Parameter is not properly given."
+	else
+		if [[ $(Files.isFile "$1") ]]; then 
+			md5 -q "$1"
+		else
+			runtimeException "Security.fileToMD5 - No such file"
+		fi
+	fi
+}
+
+export -f Security.stringToMD5
+export -f Security.fileToMD5

@@ -1,0 +1,11 @@
+#!/bin/bash
+function @script() {
+	export _EBASH_RUNMODE="SCRIPT"
+}
+
+function @nscript() {
+	unset _EBASH_RUNMODE
+}
+
+export -f @script
+export -f @nscript

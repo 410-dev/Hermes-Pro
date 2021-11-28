@@ -1,0 +1,21 @@
+#!/bin/bash
+@import Foundation/string
+
+function syntaxException() {
+	if [[ ! "$(isNull "$1")" ]]; then
+		export _EBASH_EXCEPTION="$1"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	fi
+}
+
+function runtimeException() {
+	if [[ ! "$(isNull "$1")" ]]; then
+		export _EBASH_EXCEPTION="$1"
+		export _EBASH_EXCPETION_TYPE="Runtime"
+		@exception_
+	fi
+}
+
+export -f syntaxException
+export -f runtimeException

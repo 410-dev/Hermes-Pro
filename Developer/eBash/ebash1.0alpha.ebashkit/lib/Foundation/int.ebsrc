@@ -1,0 +1,116 @@
+#!/bin/bash
+function add() {
+	if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+		export _EBASH_EXCEPTION="Addition operation"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	else
+		export buffer=$(($1 + $2))
+		if [[ ! -z "$3" ]]; then
+			export $3=$buffer
+			declare -i $3
+		else
+			echo $buffer
+		fi
+	fi
+}
+
+function subtract() {
+	if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+		export _EBASH_EXCEPTION="Subtraction operation"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	else
+		export buffer=$(($1 - $2))
+		if [[ ! -z "$3" ]]; then
+			export $3=$buffer
+			declare -i $3
+		else
+			echo $buffer
+		fi
+	fi
+}
+
+function multiply() {
+	if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+		export _EBASH_EXCEPTION="Multiplication operation"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	else
+		export buffer=$(($1 * $2))
+		if [[ ! -z "$3" ]]; then
+			export $3=$buffer
+			declare -i $3
+		else
+			echo $buffer
+		fi
+	fi
+}
+
+function divide() {
+	if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+		export _EBASH_EXCEPTION="Division operation"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	else
+		declare -i $2
+		if [[ "$2" == 0 ]]; then
+			export _EBASH_EXCEPTION="Number cannot be divided by 0"
+			export _EBASH_EXCPETION_TYPE="Runtime"
+			@exception_
+		else
+			export buffer=$(($1 / $2))
+			if [[ ! -z "$3" ]]; then
+				export $3=$buffer
+				declare -i $3
+			else
+				echo $buffer
+			fi
+		fi
+	fi
+}
+
+function int() {
+	if [[ -z "$1" ]] || [[ -z "$2" ]]; then
+		export _EBASH_EXCEPTION="Integer declaration"
+		export _EBASH_EXCPETION_TYPE="Syntax"
+		@exception_
+	else
+		export $1=$2
+		declare -i $1
+	fi
+}
+
+function isFrontGreater() {
+	if [[ $1 -gt $2 ]]; then
+		echo "true"
+	fi
+}
+
+function isBackGreater() {
+	if [[ $2 -gt $1 ]]; then
+		echo "true"
+	fi
+}
+
+function isFrontLesser() {
+	if [[ $1 -lt $2 ]]; then
+		echo "true"
+	fi
+}
+
+function isBackLesser() {
+	if [[ $2 -lt $1 ]]; then
+		echo "true"
+	fi
+}
+
+export -f int
+export -f isFrontLesser
+export -f isFrontGreater
+export -f isBackLesser
+export -f isBackGreater
+export -f add
+export -f subtract
+export -f multiply
+export -f divide

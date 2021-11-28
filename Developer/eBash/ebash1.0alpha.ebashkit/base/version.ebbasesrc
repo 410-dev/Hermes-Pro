@@ -1,0 +1,15 @@
+#!/bin/bash
+export EBVERSION="1.0"
+export EBVERSION_MAJOR=0
+export EBVERSION_MINOR=0
+export EBVERSION_REVISION=1
+
+function @version() {
+	echo "eBash Version - $EBVERSION"
+}
+
+declare -i EBVERSION_MAJOR
+declare -i EBVERSION_MINOR
+declare -i EBVERSION_REVISION
+
+export -f @version

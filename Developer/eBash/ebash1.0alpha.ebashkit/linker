@@ -1,0 +1,10 @@
+#!/bin/bash
+export ORIGH="$(pwd)"
+export EBHOME="$LIBRARY/Developer/eBash/main"
+cd "${EBHOME}/base"
+while read DATAFILE
+do
+	source "${DATAFILE}"
+done <<< "$(ls -1 | grep ".ebbasesrc")"
+cd "$ORIGH"
+unset ORIGH

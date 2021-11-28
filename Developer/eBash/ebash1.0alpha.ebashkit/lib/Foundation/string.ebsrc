@@ -1,0 +1,18 @@
+#!/bin/bash
+function isNull() {
+	export testfor="$1"
+	if [[ -z "$testfor" ]]; then
+		echo "true"
+	fi
+	unset testfor
+}
+
+function replaceStringOccurrences() {
+	if [[ -z "$1" ]] && [[ -z "$2" ]] && [[ -z "$3" ]]; then
+		syntaxException "replaceStringOccurrences - Not enough parameters given."
+	fi
+	echo "$1" | sed "s/$2/$3/g"
+}
+
+export -f isNull
+export -f replaceStringOccurrences

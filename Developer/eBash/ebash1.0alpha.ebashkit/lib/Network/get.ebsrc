@@ -1,0 +1,29 @@
+#!/bin/bash
+@import Foundation/exception
+@import Foundation/string
+@import Files/check
+
+function Network.getHTML() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "Network.getHTML - URL not passed correctly."
+	else
+		curl -Ls "$1"
+	fi
+}
+
+function Network.saveDocument() {
+	if [[ $(isNull "$1") ]]; then
+		syntaxException "Network.saveDocument - URL not passed correctly."
+	fi
+	if [[ $(isNull "$2") ]]; then
+		syntaxException "Network.saveDocument - Save point not passed correctly."
+	fi
+	if [[ $(Files.isFile "$1") ]]; then
+		runtimeException "Network.saveDocument - File already exists in save point."
+	else
+		curl -Ls "$1" -o "$2"
+	fi
+}
+
+export -f Network.getHTML
+export -f Network.saveDocument

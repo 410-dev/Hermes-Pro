@@ -1,0 +1,11 @@
+#!/bin/bash
+function print() {
+	echo -ne "$1 $2 $3 $4 $5 $6 $7 $8 $9"
+}
+
+function println() {
+	echo -e "$1 $2 $3 $4 $5 $6 $7 $8 $9"
+}
+
+export -f println
+export -f print
