@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function string_to_md5() {
+    echo "$(md5 -qs "$1")"
+}
+
+function string_to_sha() {
+	if [[ ! -z $1 ]]; then
+		export parse=($(echo "$1" | shasum -a 512))
+		echo "${parse[0]}"
+	fi
+}
+
+export -f string_to_md5
+export -f string_to_sha
