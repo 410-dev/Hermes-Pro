@@ -1,7 +1,10 @@
 #!/bin/bash
-cd "$SYSTEM/Drivers"
-for package in *.driverpack; do
-    cd "$SYSTEM/Drivers/$package"
+
+export DRIVER_LOADER_NAME="DriverLoader"
+export DRIVER_LOADER_VERSION="1.0.0"
+
+function driverLoad() {
+    cd "$SYSTEM/Drivers/$1"
     for i in *.hmdriver; do
         verbose "[*] Loading driver: $i"
         if [ -d "$i" ]; then
@@ -22,4 +25,14 @@ for package in *.driverpack; do
             verbose "[-] Driver $i is not loaded because it is not in a readable format."
         fi
     done
+}
+
+driverLoad "org.hermes.hermesprodefault.driverpack"
+
+cd "$SYSTEM/Drivers"
+for package in *.driverpack; do
+    if [[ "$package" == "org.hermes.hermesprodefault.driverpack" ]]; then
+        continue
+    fi
+    driverLoad "$package"
 done
