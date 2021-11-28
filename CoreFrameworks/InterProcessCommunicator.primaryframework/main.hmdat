@@ -5,13 +5,23 @@ function send_intercommunication() {
 	export AppID="$1"
 	export Key="$2"
 	export Value="$3"
+	mkdir -p /Library/Cache/InterProcessCommunication/$AppID
+	echo "$Value" > /Library/Cache/InterProcessCommunication/$AppID/$Key
 }
 
 # This will read key to /Library/Cache/InterProcessCommunication/$AppID/$Key with data of $Value.
 # By default, the key is deleted.
-# Add _preserve at the end of the command to not delete
+# Add preserve at the end of the command to not delete
 function receive_intercommunication() {
 	export AppID="$1"
 	export Key="$2"
 	export Preserve="$3"
+	if [[ -f /Library/Cache/InterProcessCommunication/$AppID/$Key ]]; then
+		echo "$(cat /Library/Cache/InterProcessCommunication/$AppID/$Key)"
+		if [[ ! -z "$Preserve" ]] && [[ "$Preserve" == "preserve" ]]; then
+			echo -n ""
+		else
+			rm -rf /Library/Cache/InterProcessCommunication/$AppID/$Key
+		fi
+	fi
 }
