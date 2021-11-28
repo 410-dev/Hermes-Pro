@@ -2,7 +2,7 @@
 
 # Check if directory is accessible
 # 1st argument: Directory path
-function disk_accessible_directory() {
+function Disk.accessible_directory() {
 	if [[ ! -d "$1" ]]; then
 		echo "0"
 	else
@@ -12,7 +12,7 @@ function disk_accessible_directory() {
 
 # Check if file is accessible
 # 1st argument: File path
-function disk_accessible_file() {
+function Disk.accessible_file() {
 	if [[ ! -f "$1" ]]; then
 		echo "0"
 	else
@@ -23,8 +23,8 @@ function disk_accessible_file() {
 
 # Create directory
 # 1st argument: directory name
-function disk_create_directory() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_directory "$1")" == 1 ]]; then
+function Disk.create_directory() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_directory "$1")" == 1 ]]; then
 		mkdir -p "$1"
 	fi
 }
@@ -32,8 +32,8 @@ function disk_create_directory() {
 # Create file
 # 1st argument: file name
 # 2nd argument: file content
-function disk_create_file() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_directory "$1")" == 1 ]]; then
+function Disk.create_file() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_directory "$1")" == 1 ]]; then
 		echo "$2" > "$1"
 	fi
 }
@@ -41,51 +41,51 @@ function disk_create_file() {
 # Append to file
 # 1st argument: file name
 # 2nd argument: file content
-function disk_append_to_file() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_file "$1")" == 1 ]]; then
+function Disk.append_to_file() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_file "$1")" == 1 ]]; then
 		echo "$2" >> "$1"
 	fi
 }
 
 # Remove directory
 # 1st argument: directory name
-function disk_remove_directory() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_directory "$1")" == 1 ]]; then
+function Disk.remove_directory() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_directory "$1")" == 1 ]]; then
 		rm -rf "$1"
 	fi
 }
 
 # Remove file
 # 1st argument: file name
-function disk_remove_file() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_file "$1")" == 1 ]]; then
+function Disk.remove_file() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_file "$1")" == 1 ]]; then
 		rm -f "$1"
 	fi
 }
 
 # Read directory
 # 1st argument: directory name
-function disk_read_directory() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_directory "$1")" == 1 ]]; then
+function Disk.read_directory() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_directory "$1")" == 1 ]]; then
 		ls -1 "$1"
 	fi
 }
 
 # Read file
 # 1st argument: file name
-function disk_read_file() {
-	if [[ ! -z "$1" ]] && [[ "$(disk_accessible_file "$1")" == 1 ]]; then
+function Disk.read_file() {
+	if [[ ! -z "$1" ]] && [[ "$(Disk.accessible_file "$1")" == 1 ]]; then
 		cat "$1"
 	fi
 }
 
 
-export -f disk_accessible_directory
-export -f disk_accessible_file
-export -f disk_create_directory
-export -f disk_create_file
-export -f disk_append_to_file
-export -f disk_remove_directory
-export -f disk_remove_file
-export -f disk_read_directory
-export -f disk_read_file
+export -f Disk.accessible_directory
+export -f Disk.accessible_file
+export -f Disk.create_directory
+export -f Disk.create_file
+export -f Disk.append_to_file
+export -f Disk.remove_directory
+export -f Disk.remove_file
+export -f Disk.read_directory
+export -f Disk.read_file
