@@ -20,6 +20,7 @@ for i in *.primaryframework; do
         verbose "[-] Primary framework $i is not loaded because it is not in a readable format."
     fi
 done
+verbose "[*] Finished loading primary frameworks."
 
 for i in *.secondaryframework; do
     cd "$SYSTEM/CoreFrameworks"
@@ -39,6 +40,7 @@ for i in *.secondaryframework; do
         verbose "[-] Secondary framework $i is not loaded because it is not in a readable format."
     fi
 done
+verbose "[*] Finished loading secondary frameworks."
 
 for i in *.tertiaryframework; do
     cd "$SYSTEM/CoreFrameworks"
@@ -58,10 +60,12 @@ for i in *.tertiaryframework; do
         verbose "[-] Tertiary framework $i is not loaded because it is not in a readable format."
     fi
 done
+verbose "[*] Finished loading tertiary frameworks."
 
-source "$(dirname "$0")/FinalLoadTarget"
+export FinalLoadTarget="$(cat "$(dirname "$0")/FinalLoadTarget")"
 for i in $FinalLoadTarget; do
-    bundle_start "$i"
+    verbose "[*] Loading final target bundle: $i"
+    bundle_start "$SYSTEM/CoreExecutives/$i"
     export exitcode=$?
     if [[ "$exitcode" == "111" ]]; then
         verbose "[-] There was an error while loading bundle at $i"

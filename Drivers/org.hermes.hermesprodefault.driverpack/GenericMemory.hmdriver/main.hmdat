@@ -19,6 +19,7 @@ function memdelete() {
     rm "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
 }
 
+export -f setAddressToMD5Str
 export -f memwrite
 export -f memread
 export -f memdelete
