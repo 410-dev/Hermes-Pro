@@ -4,6 +4,7 @@ export BUNDLE_BUILD=1
 export BUNDLE_SDK=1
 export BUNDLE_AUTHOR="Hermes Pro"
 export BUNDLE_EXECUTIVE="HeliumNative"
+export BUNDLE_ID="os.coreframework.shared"
 
 
 export DRIVER_COMPATIBILITY=1
