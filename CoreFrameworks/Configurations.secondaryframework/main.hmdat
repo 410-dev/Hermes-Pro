@@ -1,0 +1,18 @@
+#!/bin/bash
+
+function Config.read() {
+    export confloc="$LIBRARY/Preferences/$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
+    if [[ -f "$confloc" ]]; then
+        cat "$confloc"
+    else
+        echo ""
+    fi
+    unset confloc
+}
+
+function Config.set() {
+    export confloc="$LIBRARY/Preferences/$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
+    mkdir -p "$(dirname "$confloc")"
+    echo "$2" > "$confloc"
+    unset confloc
+}
