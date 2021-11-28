@@ -1,27 +1,32 @@
 #!/bin/bash
 
 # This will add key to /Library/Cache/InterProcessCommunication/$AppID/$Key with data of $Value.
-function send_intercommunication() {
-	export AppID="$1"
-	export Key="$2"
-	export Value="$3"
-	mkdir -p /Library/Cache/InterProcessCommunication/$AppID
-	echo "$Value" > /Library/Cache/InterProcessCommunication/$AppID/$Key
+function Comm.send() {
+	export Key="$1"
+	export Value="$2"
+	mkdir -p /Library/Cache/InterProcessCommunication/"$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)"
+	echo "$Value" > /Library/Cache/InterProcessCommunication/"$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)"/$Key
+	unset Key
+	unset Value
 }
 
 # This will read key to /Library/Cache/InterProcessCommunication/$AppID/$Key with data of $Value.
 # By default, the key is deleted.
 # Add preserve at the end of the command to not delete
-function receive_intercommunication() {
-	export AppID="$1"
-	export Key="$2"
-	export Preserve="$3"
-	if [[ -f /Library/Cache/InterProcessCommunication/$AppID/$Key ]]; then
-		echo "$(cat /Library/Cache/InterProcessCommunication/$AppID/$Key)"
+function Comm.recv() {
+	export Key="$1"
+	export Preserve="$2"
+	if [[ -f /Library/Cache/InterProcessCommunication/"$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)"/$Key ]]; then
+		echo "$(cat /Library/Cache/InterProcessCommunication/"$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)"/$Key)"
 		if [[ ! -z "$Preserve" ]] && [[ "$Preserve" == "preserve" ]]; then
 			echo -n ""
 		else
-			rm -rf /Library/Cache/InterProcessCommunication/$AppID/$Key
+			rm -rf /Library/Cache/InterProcessCommunication/"$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)"/$Key
 		fi
 	fi
+	unset Key
+	unset Preserve
 }
+
+export -f Comm.send
+export -f Comm.recv
