@@ -60,11 +60,17 @@ for i in *.tertiaryframework; do
 done
 
 source "$(dirname "$0")/FinalLoadTarget"
-bundle_start "$FinalLoadTarget"
-export exitcode=$?
-if [[ "$exitcode" == "111" ]]; then
-    verbose "[-] There was an error while loading "
-else
-    verbose "[*] Shell has exited."
-    exit $exitcode
-fi
+for i in $FinalLoadTarget; do
+    bundle_start "$i"
+    export exitcode=$?
+    if [[ "$exitcode" == "111" ]]; then
+        verbose "[-] There was an error while loading bundle at $i"
+    elif [[ "$exitcode" == "0" ]] && [[ ! -z "$(echo "$i" | grep "UserShell")" ]]; then
+        verbose "[*] Shell has exited."
+        exit $exitcode
+    elif [[ "$exitcode" == "0" ]]; then
+        verbose "[*] Task finished."
+    else
+        verbose "[-] Not proper exit code!"
+    fi
+done

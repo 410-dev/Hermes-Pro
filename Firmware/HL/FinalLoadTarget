@@ -1,2 +1,4 @@
 #!/bin/bash
-export FinalLoadTarget="$SYSTEM/CoreExecutives/UserShell.hmexec"
+export FinalLoadTarget="$SYSTEM/CoreExecutives/StructureBuilder.hmexec
+$SYSTEM/CoreExecutives/Authenticate.hmexec login
+$SYSTEM/CoreExecutives/UserShell.hmexec"
