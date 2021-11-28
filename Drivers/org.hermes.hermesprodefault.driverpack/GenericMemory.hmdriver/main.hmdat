@@ -7,19 +7,19 @@ function setAddressToMD5Str() {
     echo "$(md5 -qs "$1")"
 }
 
-function memwrite() {
+function HARDWARE_memwrite() {
     echo "$2" > "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
 }
 
-function memread() {
+function HARDWARE_memread() {
     cat "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
 }
 
-function memdelete() {
+function HARDWARE_memdelete() {
     rm "$CACHE/EmulatedMemory/$(setAddressToMD5Str "$1")"
 }
 
 export -f setAddressToMD5Str
-export -f memwrite
-export -f memread
-export -f memdelete
+export -f HARDWARE_memwrite
+export -f HARDWARE_memread
+export -f HARDWARE_memdelete

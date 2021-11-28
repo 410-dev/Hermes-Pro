@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function Config.read() {
-    export confloc="$LIBRARY/Preferences/$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
+    export confloc="$LIBRARY/Preferences/$(HARDWARE_memread $(HARDWARE_memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
     if [[ -f "$confloc" ]]; then
         cat "$confloc"
     else
@@ -11,7 +11,7 @@ function Config.read() {
 }
 
 function Config.set() {
-    export confloc="$LIBRARY/Preferences/$(memread $(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
+    export confloc="$LIBRARY/Preferences/$(HARDWARE_memread $(HARDWARE_memread PARENTEXECUTOR)_BUNDLESCOPELIMITER)/$1"
     mkdir -p "$(dirname "$confloc")"
     echo "$2" > "$confloc"
     unset confloc
