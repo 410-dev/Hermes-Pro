@@ -13,9 +13,12 @@ function bundle_start() {
     else
         cd "$1"
         if [[ -f "meta.hmdat" ]]; then
+            memwrite PARENTEXECUTOR "$BUNDLE_ID"
             source "meta.hmdat"
-            if [[ "$BUNDLE_EXECUTIVE" == "HeliumNative" ]]; then
+            if [[ "$BUNDLE_EXECUTIVE" == "HeliumNative" ]]; then    
+                memwrite "$(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER" "$BUNDLE_ID"
                 ./main "$PWD" "${@:2}"
+                memwrite "$(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER" $(memread PARENTEXECUTOR)
             else
                 echo "[-] Bundle $1 is not loaded because it is not a compatible architecture."
             fi
@@ -39,9 +42,12 @@ function bundle_read() {
     else
         cd "$1"
         if [[ -f "meta.hmdat" ]]; then
+            memwrite PARENTEXECUTOR "$BUNDLE_ID"
             source "meta.hmdat"
             if [[ "$BUNDLE_EXECUTIVE" == "HeliumNative" ]]; then
+                memwrite "$(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER" "$BUNDLE_ID"
                 source "main.hmdat" "$PWD" "${@:2}"
+                memwrite "$(memread PARENTEXECUTOR)_BUNDLESCOPELIMITER" $(memread PARENTEXECUTOR)
             else
                 echo "[-] Bundle $1 is not loaded because it is not a compatible architecture."
             fi
