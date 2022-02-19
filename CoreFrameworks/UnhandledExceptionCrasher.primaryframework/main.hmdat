@@ -1,4 +1,0 @@
-#!/bin/bash
-if [[ $(bootArgumentHas "no-crash-enforcement") == 0 ]]; then
-    set -e
-fi

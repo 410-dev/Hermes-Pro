@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export DRVNAME="EmulatedOutput"
+export DRVVER="1.0"
+export DRVAUTHOR="Hermes Pro"
+export DRVDESCRIPTION="This driver is used to emulate output events on the host."

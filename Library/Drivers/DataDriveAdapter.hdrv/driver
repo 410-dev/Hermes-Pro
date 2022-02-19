@@ -1,0 +1,5 @@
+#!/bin/bash
+
+@import File/new
+
+File.createDirectory "${CACHE}"

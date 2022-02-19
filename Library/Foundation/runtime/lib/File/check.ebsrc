@@ -1,0 +1,37 @@
+#!/bin/bash
+@import Foundation/exception
+@import Foundation/string
+
+function File.exists() {
+	if [[ $(String.isNull "$1") ]]; then
+		syntaxException "File.exists - Parameter is not properly given."
+	else
+		if [[ -e "$1" ]]; then
+			echo "true"
+		fi
+	fi
+}
+
+function File.isDirectory() {
+	if [[ $(String.isNull "$1") ]]; then
+		syntaxException "File.isDirectory - Parameter is not properly given."
+	else
+		if [[ -d "$1" ]]; then
+			echo "true"
+		fi
+	fi
+}
+
+function File.isFile() {
+	if [[ $(String.isNull "$1") ]]; then
+		syntaxException "File.isFile - Parameter is not properly given."
+	else
+		if [[ -f "$1" ]]; then
+			echo "true"
+		fi
+	fi
+}
+
+export -f File.exists
+export -f File.isDirectory
+export -f File.isFile

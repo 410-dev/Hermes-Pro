@@ -1,0 +1,99 @@
+#!/bin/bash
+@import Hermes/system
+@import File/check
+@import File/new
+@import Foundation/out
+@import Foundation/string
+@import Hash/sha
+
+
+function Hermes.pref() {
+
+	# Exit codes
+	# 1: Preference code not given
+	# 2: Preference code not found
+
+
+	# If the first parameter is null, the throw error
+	if [[ $(String.isNull "$1") ]]; then
+		return 1
+	fi
+
+	# If preference directory is not present, make one.
+	if [[ ! $(File.isDirectory "${DATA}/Preferences") ]]; then
+		s_log "Creating preference directory..."
+		File.createDirectory "${DATA}/Preferences"
+	fi
+
+	# For security purpose, hash the preference code
+	# TODO - Comment this out for release
+	# prefCode=$(Hash.stringToSha 256 "$1")
+	prefCode=$1
+
+	# If the second parameter is present, then use write mode.
+	# Otherwise, use read mode.
+	if [[ $(String.isNull "$2") ]]; then
+		# Read mode
+
+		# Check if the preference file exists
+		if [[ $(File.isFile "${DATA}/Preferences/${prefCode}.prefd") ]]; then
+			# Read the preference file
+			cat "${DATA}/Preferences/${prefCode}.prefd"
+		else
+			# Return error
+			s_log "Preference $1 not found."
+			return 2
+		fi
+	else
+		# Write mode
+		File.overwrite "${DATA}/Preferences/${prefCode}.prefd" "$2"
+	fi
+}
+
+function Hermes.userpref() {
+	# Exit codes
+	# 1: Preference code not given
+	# 2: Preference code not found
+	# 3: User ID not given
+	# 4: User directory not found
+
+	# If the first parameter is empty, then no user ID.
+	if [[ $(String.isNull "$1") ]]; then
+		return 3
+	fi
+
+	# If the second parameter is empty, then no preference code.
+	if [[ $(String.isNull "$2") ]]; then
+		return 1
+	fi
+
+	# Get the user directory path
+	userDir=$(Hermes.pref "System.UserHomeDirectory_$1")
+
+	# For security purpose, hash the preference code
+	# TODO - Comment this out for release
+	# prefCode=$(Hash.stringToSha 256 "$2")
+	prefCode=$2
+
+	# If the third parameter is present, then use write mode.
+	# Otherwise, use read mode.
+	if [[ $(String.isNull "$3") ]]; then
+		# Read mode
+
+		# Check if the preference file exists
+		if [[ $(File.isFile "${userDir}/Library/Preferences/${prefCode}.prefd") ]]; then
+			# Read the preference file
+			cat "${userDir}/Library/Preferences/${prefCode}.prefd"
+		else
+			# Return error
+			s_log "Preference $1 not found."
+			return 2
+		fi
+	else
+		# Write mode
+		File.overwrite "${userDir}/Library/Preferences/${prefCode}.prefd" "$2"
+	fi
+}
+
+export -f Hermes.pref
+export -f Hermes.userpref

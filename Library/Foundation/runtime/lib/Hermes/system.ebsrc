@@ -1,0 +1,47 @@
+#!/bin/bash
+@import Foundation/out
+@import File/check
+@import File/new
+@import Date
+
+function s_log() {
+	if [[ $(File.isDirectory "${LOGS}") ]]; then
+		File.append "${LOGS}/log-latest" "$(Date.getTimeStamp): $@"
+	fi
+}
+
+function bootargs() {
+	# Loop through $BOOTARGS
+	for arg in $BOOTARGS; do
+		if [[ "$1" == "$arg" ]]; then
+			echo "true"
+		fi
+	done
+}
+
+function verbose() {
+	s_log "[VERBOSE]: $@"
+	if [[ $(bootargs "verbose") ]]; then
+		println "${GREEN}[+]: $@"
+	fi
+}
+
+function verbose_err() {
+	s_log "[VERBOSE_ERR]: $@"
+	if [[ $(bootargs "verbose") ]]; then
+		println "${RED}[-]: $@"
+	fi
+}
+
+function verbose_warn() {
+	s_log "[VERBOSE_WARN]: $@"
+	if [[ $(bootargs "verbose") ]]; then
+		println "${YELLOW}[!]: $@"
+	fi
+}
+
+export -f s_log
+export -f bootargs
+export -f verbose
+export -f verbose_err
+export -f verbose_warn
