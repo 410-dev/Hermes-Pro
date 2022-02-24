@@ -21,7 +21,7 @@ function Hermes.pref() {
 
 	# If preference directory is not present, make one.
 	if [[ ! $(File.isDirectory "${DATA}/Preferences") ]]; then
-		s_log "Creating preference directory..."
+		s_log "[PREFERENCE-FN] Creating preference directory..."
 		File.createDirectory "${DATA}/Preferences"
 	fi
 
@@ -41,7 +41,7 @@ function Hermes.pref() {
 			cat "${DATA}/Preferences/${prefCode}.prefd"
 		else
 			# Return error
-			s_log "Preference $1 not found."
+			s_log "[PREFERENCE-FN-ERROR] Preference $1 not found."
 			return 2
 		fi
 	else
@@ -91,7 +91,7 @@ function Hermes.userpref() {
 		fi
 	else
 		# Write mode
-		File.overwrite "${userDir}/Library/Preferences/${prefCode}.prefd" "$2"
+		File.overwrite "${userDir}/Library/Preferences/${prefCode}.prefd" "$3"
 	fi
 }
 

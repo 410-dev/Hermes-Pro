@@ -1,0 +1,6 @@
+#!/bin/bash
+
+@import Hermes/application
+
+# TODO: TEST
+Hermes.appStart "${SYSTEM}/Library/CoreApplications/Update.proapp" silent

@@ -13,6 +13,8 @@ if [[ ! "$1" == "nocompile" ]]; then
 	rm -rf "$PWD/System/.gitignore" 2>/dev/null
 	rm -rf "$PWD/System/README.md" 2>/dev/null
 	rm -rf "$PWD/System/compileandrun" 2>/dev/null
+	rm -rf "$PWD/System/latest" 2>/dev/null
+	rm -rf "$PWD/System/prepscript.sh" 2>/dev/null
 	echo "Sync done."
 
 	# .sh

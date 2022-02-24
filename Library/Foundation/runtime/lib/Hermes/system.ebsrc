@@ -2,11 +2,12 @@
 @import Foundation/out
 @import File/check
 @import File/new
+@import File/read
 @import Date
 
 function s_log() {
 	if [[ $(File.isDirectory "${LOGS}") ]]; then
-		File.append "${LOGS}/log-latest" "$(Date.getTimeStamp): $@"
+		File.append "${LOGS}/log-${OS_STARTED_TIME}" "$(Date.getTimeStamp): $@" --create
 	fi
 }
 
@@ -40,8 +41,61 @@ function verbose_warn() {
 	fi
 }
 
+function shellNotify() {
+	s_log "[SHELL_NOTIFY]: $@"
+
+	# Notify the shell - If the first parameter is null, then use read mode
+	NOTIFIERPATH="${CACHE}/notifier"
+	if [[ $(String.isNull "$1") ]]; then
+		if [[ $(File.isFile "${NOTIFIERPATH}") ]]; then
+			s_log "[SHELL_NOTIFY]: Notifying shell..."
+			File.readString "${NOTIFIERPATH}" content
+			verbose "Notifying shell: ${content}"
+			println "${BLUE}${content}"
+			File.removeFile "${NOTIFIERPATH}"
+		else
+			s_log "[SHELL_NOTIFY]: No notification for shell..."
+		fi
+	else
+		if [[ $(bootargs "verbose") ]]; then
+			println "${BLUE}[#]: $@"
+		fi
+		s_log "[SHELL_NOTIFY]: Writing notification for shell..."
+		if [[ $(File.isFile "${NOTIFIERPATH}") ]]; then
+			File.overwrite "${NOTIFIERPATH}" "$1"
+		else
+			File.append "${NOTIFIERPATH}" "$1"
+		fi
+	fi
+}
+
+function shellCommand() {
+	s_log "[SHELL_COMMAND]: $@"
+	if [[ $(bootargs "verbose") ]]; then
+		println "${MAGENTA}[C]: $@"
+	fi
+
+	# Execute command
+	if [[ $(String.isNull "$1") ]] && [[ $(File.isFile "${CACHE}/shell-command-queue") ]] ; then
+		s_log "[SHELL_COMMAND]: Reading queued command..."
+		File.readString "${CACHE}/shell-command-queue" command
+		s_log "[SHELL_COMMAND]: Queued command: ${command}"
+		echo "${command}"
+		File.removeFile "${CACHE}/shell-command-queue"
+	else
+		s_log "[SHELL_COMMAND]: Adding command to queue..."
+		if [[ "$(File.isFile "${CACHE}/shell-command-queue")" ]]; then
+			File.append "${CACHE}/shell-command-queue" "$1"
+		else
+			File.overwrite "${CACHE}/shell-command-queue" "$1"
+		fi
+	fi
+}
+
 export -f s_log
 export -f bootargs
 export -f verbose
 export -f verbose_err
 export -f verbose_warn
+export -f shellNotify
+export -f shellCommand

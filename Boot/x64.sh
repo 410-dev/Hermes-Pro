@@ -10,10 +10,10 @@ while [[ true ]]; do
     # Load partition information
     source "$(dirname "$0")/Partitions"
 
-
     # Check if {SYSTEM}/Foundation/init exists
     if [[ -f "${SYSTEM}/Library/Foundation/init" ]]; then
         # Run the init script
+        echo "Foundation: Running init script..."
         "${SYSTEM}/Library/Foundation/init"
         exitCode=$?
 

@@ -3,3 +3,4 @@
 @import File/new
 
 File.createDirectory "${CACHE}"
+File.createDirectory "${LOGS}"

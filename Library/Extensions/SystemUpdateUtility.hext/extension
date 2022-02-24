@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#TODO
+:
+
+# Read from preferences - System.UpdateUtility.RunOnBootUpdate
+# If true, run update utility on boot
+# If false, do not run update utility on boot
+
+# Exit signal must be restart signal if installed (100)
+# Otherwise, exit signal must be exit signal (0)

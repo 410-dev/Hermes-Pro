@@ -1,4 +1,5 @@
 #!/bin/bash
+
 function String.isNull() {
 	export testfor="$1"
 	if [[ -z "$testfor" ]] || [[ "$testfor" == "$NULL" ]]; then
@@ -76,6 +77,31 @@ function String.split() {
 	IFS="$2" read -ra $3 <<< "$1"
 }
 
+function String.substring() {
+	if [[ $(String.isNull "$1") ]] || [[ $(String.isNull "$2") ]]; then
+		syntaxException "String.substring - Not enough parameters given."
+	fi
+
+	re='^[0-9]+$'
+	if [[ ! $3 =~ $re ]]; then
+		export buffer="${1:$2:$3}"
+		if [[ $(String.isNull "$4") ]]; then
+			echo "$buffer"
+		else
+			export $4="$buffer"
+		fi
+	else
+		export buffer="${1:$2}"
+		if [[ $(String.isNull "$3") ]]; then
+			echo "$buffer"
+		else
+			export $3="$buffer"
+		fi
+	fi
+
+	unset buffer
+}
+
 
 export -f String.split
 export -f String.isNull
@@ -85,3 +111,5 @@ export -f String.isEmpty
 export -f String.contains
 export -f String.startsWith
 export -f String.endsWith
+export -f String.split
+export -f String.substring

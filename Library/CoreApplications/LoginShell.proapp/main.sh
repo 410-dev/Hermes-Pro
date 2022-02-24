@@ -10,7 +10,7 @@ isUserSetupComplete=$(Hermes.pref "System.UserCounts")
 if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
     # Create a new user
     dousersetup=true
-    s_log "Creating a new user..."
+    s_log "[LoginShell.proapp] Creating a new user..."
     
     while [[ true ]]; do
         input "Enter a new username: " userName
@@ -107,6 +107,12 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
     Hermes.pref "System.UserPassword_${userNumID}" "$(Hash.stringToSha 256 "${userPassword}")"
     verbose "User password set."
 
+
+    # Set user permission
+    verbose "Setting up user permission..."
+    Hermes.pref "System.UserPermission_${userNumID}" "10"
+    verbose "User permission set."
+
     # Set user hidden
     verbose "Setting up user hidden/nohidden..."
     if [[ ${userHidden} == "y" ]] || [[ ${userHidden} == "Y" ]]; then
@@ -116,6 +122,10 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
         verbose "User visible."
         Hermes.pref "System.UserHidden_${userNumID}" "false"
     fi
+
+    # Set command paths for the user
+    verbose "Setting up user command paths..."
+    Hermes.userpref "${userNumID}" "System.CommandPaths" "${SYSTEM}/Bin;"
 
     # Set user setup done
     Hermes.userpref "${userNumID}" "System.UserSetupDone" "true"

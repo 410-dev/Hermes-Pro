@@ -133,7 +133,6 @@ function isBackFloatLesser() {
 	fi
 }
 
-
 export -f float
 export -f addf
 export -f subtractf

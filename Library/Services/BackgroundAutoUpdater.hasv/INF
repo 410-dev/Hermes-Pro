@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export SVCNAME="BackgroundAutoUpdater"
+export SVCVER="1.0"
+export SVCAUTHOR="Hermes Pro"
+export SVCDESC="This service is used to download update for the system automatically."
+export SVCLOOPDELAY="86400" # 1 day

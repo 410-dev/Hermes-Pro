@@ -2,4 +2,4 @@
 
 @import Foundation/out
 
-println "${BLUE} [ Hermes Pro ]"
+println "${BLUE} [ Hermes Pro ${OS_VERSION} - ${OS_CODENAME} ]"

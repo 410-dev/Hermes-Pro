@@ -11,6 +11,7 @@ export DATA="$ROOTFS/Data"
 export LOGS="$DATA/Logs"
 export CACHE="$DATA/Cache"
 export STOPSIG="$CACHE/____STOPSIG____"
+export RSTSIG="$CACHE/____RSTSIG____"
 
 export BOOTREFUSE="$CACHE/bootrefuse"
 export BOOTSECT="$SYSTEM/Boot"

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Load runtime
 source "${SYSTEM}/Library/Foundation/runtime/loader" "${SYSTEM}/Library/Foundation/runtime/"
 
@@ -8,8 +7,12 @@ source "${SYSTEM}/Library/Foundation/runtime/loader" "${SYSTEM}/Library/Foundati
 @import Hermes/system
 @import Hermes/application
 @import Foundation/string
+@import Date
 @import File/check
 @import File/remove
+
+
+export OS_STARTED_TIME=$(Date.getTimeStamp)
 
 # 
 # Load Drivers
@@ -105,9 +108,17 @@ do
         # Load actual extension
         @include "${SYSTEM}/Library/Extensions/${extension}/extension"
         exitStatus="$?"
-        
+    
         # Check if the extension loaded successfully
-        if [[ "${exitStatus}" != "0" ]]; then
+        # If the extension returns 100, then send restart signal
+        # If the extension returns 101, then send shutdown signal
+        if [[ "${exitStatus}" == 100 ]]; then
+            verbose_warn "Extension requested to restart."
+            exit 1
+        elif [[ "${exitStatus}" == 101 ]]; then
+            verbose_warn "Extension requested to shutdown."
+            exit 0
+        elif [[ "${exitStatus}" != "0" ]]; then
 
             # If the extension failed to load, invoke panic
             verbose_err "Failed to load extension: ${extension}"
@@ -147,13 +158,6 @@ function async_thread() {
 
     # Background service must stay in loop
     while [[ true ]]; do
-
-        # Check if there is stop signal
-        if [[ $(File.isFile "${STOPSIG}") ]]; then
-            # Stop the program
-            verbose "Stopping background service."
-            break
-        fi
         
         # Execute the service
         if [[ ! $(String.isNull "$1") ]] && [[ $(File.isFile "$1") ]]; then
@@ -161,7 +165,11 @@ function async_thread() {
             exitStatus="$?"
 
             # If the service is stopped, break the loop
-            if [[ "${exitStatus}" != "0" ]]; then
+            # If the service wants to quit, break the loop (exitStatus=101)
+            if [[ "${exitStatus}" == "101" ]]; then
+                s_log "Background service requested to quit."
+                break
+            elif [[ "${exitStatus}" != "0" ]]; then
                 s_log "Failed to execute background service: $1"
                 break
             fi
@@ -169,10 +177,29 @@ function async_thread() {
 
         # Sleep for a while
         if [[ ! $(String.isNull "$2") ]]; then
-            sleep "$2"
+            sleepTime="$2"
         else
-            sleep 1
+            sleepTime=1
         fi
+
+        # Loop $sleepTime
+        for ((i=0; i<$sleepTime; i++)); do
+            # Check if there is stop signal
+            if [[ $(File.isFile "${STOPSIG}") ]]; then
+                # Stop the program
+                verbose "Stopping service: ${threadName}"
+                break 2
+            fi
+
+            if [[ $(File.isFile "${CACHE}/OS.AsyncThreads.infd/${threadName}_KILL") ]]; then
+                # Stop the program
+                verbose "Due to external request, service ${threadName} is quitted."
+                break 2
+            fi
+
+            # Sleep 1 second
+            sleep 1
+        done
 
     done
 
@@ -198,7 +225,17 @@ do
         #    - Service version
         #    - Service loop delay
         @include "${SYSTEM}/Library/Services/${service}.hasv/INF"
-        async_thread "${SYSTEM}/Library/Services/${service}.hasv/main" ${LOOP_DELAY} & >/dev/null 2>/dev/null
+
+
+        # Check if the service information is filled
+        if [[ $(String.isNull "${SVCNAME}") ]] || [[ $(String.isNull "${SVCVER}") ]] || [[ $(String.isNull "${SVCDESC}") ]] || [[ $(String.isNull "${SVCAUTHOR}") ]] || [[ $(String.isNull "${SVCLOOPDELAY}") ]]; then
+            verbose_err "Service information for \"${service}\" is incomplete!"
+            continue
+        else
+            verbose "Service information: ${SVCNAME} (v.${SVCVER}) by ${SVCAUTHOR}"
+        fi
+
+        async_thread "${SYSTEM}/Library/Services/${service}.hasv/service" ${SVCLOOPDELAY} & 2>/dev/null >/dev/null
     fi
 done <<< "$services"
 unset services service
@@ -209,5 +246,8 @@ unset services service
 # Shell is ready to run.
 # 
 Hermes.appStart "${SYSTEM}/Library/CoreApplications/Shell.proapp"
+exitCode=$?
+File.write "${STOPSIG}" "1"
+sleep 3
 File.removeDirectory "${CACHE}"
-exit $?
+exit $exitCode
