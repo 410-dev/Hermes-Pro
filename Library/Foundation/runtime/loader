@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Will return to parent working directory
+export ORIGH="$(pwd)"
+
+# Set the root directory for eBash
+if [[ -z "$EBHOME" ]]; then
+	export EBHOME="$(dirname "$0")"
+fi
+if [[ ! -z "$1" ]]; then
+	export EBHOME="$1"
+fi
+
+# Load all ebbasesrc using for loop
+cd "${EBHOME}/base"
+if [[ "$?" != "0" ]]; then
+	echo "Error: Unable to locate and enter EBHOME."
+	exit 9
+fi
+while read DATAFILE
+do
+	# Load
+	source "${DATAFILE}"
+	if [[ "$?" != "0" ]]; then
+		echo "Error: Failed loading base component."
+		exit 9
+	fi
+
+done <<< "$(ls -1 | grep ".ebbasesrc")"
+
+# Return to parent working directory and remove the memory
+cd "$ORIGH"
+if [[ "$?" != "0" ]]; then
+	echo "Error: Failed to enter original working directory."
+	exit 9
+fi
+
+unset ORIGH
+
+if [[ "$EBASH_PREP_PRINT" == "1" ]]; then
+	echo "eBash environment preparation successful."
+fi

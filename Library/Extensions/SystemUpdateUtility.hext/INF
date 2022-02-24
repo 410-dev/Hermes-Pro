@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export EXTNAME="SystemUpdateUtility"
+export EXTVER="1.0"
+export EXTAUTHOR="Hermes Pro"
+export EXTDESCRIPTION="This extension will install update on boot."

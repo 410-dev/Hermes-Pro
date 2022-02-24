@@ -1,0 +1,29 @@
+#!/bin/bash
+
+function @exception_() {
+	if [[ ! -z "$_EBASH_EXCEPTION" ]]; then
+		echo "eBash ${_EBASH_EXCEPTION_TYPE} Exception: ${_EBASH_EXCEPTION}"
+		unset _EBASH_EXCEPTION _EBASH_EXCEPTION_TYPE
+		if [[ "$_EBASH_RUNMODE" == "SCRIPT" ]]; then
+			exit
+		fi
+	fi
+}
+
+# function @handleException() {
+# 	if [[ -z $1 ]]; then
+# 		export _EBASH_EXCEPTION="Handling Exception"
+# 		export _EBASH_EXCPETION_TYPE="Syntax"
+# 		@exception_
+# 	elif [[ -z "$(type $1 | grep "is a function")" ]]; then
+# 		export _EBASH_EXCEPTION="Handling Exception"
+# 		export _EBASH_EXCPETION_TYPE="Type"
+# 		@exception_
+# 	else
+# 		function STACK_ERROR_HANDLE_FUNCTION() {
+# 			$1       # This part is wrong
+# 		}
+# }
+
+
+export -f @exception_

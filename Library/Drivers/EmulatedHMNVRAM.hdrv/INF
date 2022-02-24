@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export DRVNAME="EmulatedHMNVRAM"
+export DRVVER="1.0"
+export DRVAUTHOR="Hermes Pro"
+export DRVDESCRIPTION="This driver is used to emulate the NVRAM for Hermes Pro, for those devices that has firmware without NVRAM."

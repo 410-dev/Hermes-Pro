@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export EXTNAME="StartupScreen"
+export EXTVER="1.0"
+export EXTAUTHOR="Hermes Pro"
+export EXTDESCRIPTION="This extension shows the startup screen of Hermes Pro."

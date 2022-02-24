@@ -1,7 +1,0 @@
-export MEMORY_DRIVER_NAME="Hermes Pro Generic Memory"
-export MEMORY_DRIVER_VERSION="1.0"
-export MEMORY_DRIVER_INFO=""
-export MEMORY_NAME="Hermes Pro Generic Memory"
-export MEMORY_FREQNENCY="1218MHz"
-export MEMORY_VOLTAGE="1.2V"
-export MEMORY_INTERFACE="EM-DDR4"

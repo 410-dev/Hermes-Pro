@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export DRVNAME="EmulatedInput"
+export DRVVER="1.0"
+export DRVAUTHOR="Hermes Pro"
+export DRVDESCRIPTION="This driver is used to emulate input events on the host."

@@ -1,0 +1,31 @@
+#!/bin/bash
+@import Foundation/exception
+@import Foundation/string
+@import File/check
+
+function File.readStringData() {
+
+	@import Foundation/out
+	println "${YELLOW}File.readStringData method will be depricated soon."
+
+	File.readString "$1" "$2"
+}
+
+function File.readString() {
+	if [[ $(String.isNull "$1") ]]; then
+		syntaxException "File.readStringData - Parameter is not properly given."
+	else
+		if [[ ! $(File.isFile "$1") ]]; then
+			runtimeException "File.readStringData - File does not exist: $1"
+		else
+			if [[ $(String.isNull "$2") ]]; then
+				cat "$1"
+			else
+				export $2="$(cat "$1")"
+			fi
+		fi
+	fi
+}
+
+export -f File.readStringData
+export -f File.readString

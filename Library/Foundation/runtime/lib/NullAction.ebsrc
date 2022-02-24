@@ -1,0 +1,6 @@
+#!/bin/bash
+function NullAction.doNothing() {
+	:
+}
+
+export -f NullAction.doNothing

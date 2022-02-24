@@ -1,0 +1,41 @@
+#!/bin/bash
+
+@import Foundation/string
+
+# If NVRAM controlling firmware does not exist, emulate it.
+if [[ "$(String.isNull "$NVRAM_FIRMWARE")" ]]; then
+    function NVRAM() {
+        @import File
+        @import Foundation
+
+        # If the first parameter is null, the throw error
+        if [[ $(String.isNull "$1") ]]; then
+            return 1
+        fi
+
+        File.createDirectory "${ROOTFS}/NVRAM"
+
+        # If the second parameter is null, then use read mode.
+        # Otherwise, use write mode.
+        if [[ $(String.isNull "$2") ]]; then
+            # Read mode
+
+            # Check if the preference file exists
+            if [[ $(File.isFile "${ROOTFS}/NVRAM/${1}.nvrdat") ]]; then
+                # Read the preference file
+                cat "${ROOTFS}/NVRAM/${1}.nvrdat"
+            else
+                # Return error
+                verbose "NVRAM data $1 not found."
+                return 2
+            fi
+        else
+            # Write mode
+            File.overwrite "${ROOTFS}/NVRAM/${1}.nvrdat" "${@:2}"
+        fi
+    }
+
+    export -f NVRAM
+    export NVRAM_FIRMWARE="Hermes Pro Driver-level Emulated NVRAM"
+    export NVRAM_VERSION="1.0.0Alpha1"
+fi

@@ -1,3 +1,0 @@
-#!/bin/bash
-verbose "[!] Warning: Driver for CPU is an emulated driver. If available, it is recommended to use the manufacturer's official driver."
-
