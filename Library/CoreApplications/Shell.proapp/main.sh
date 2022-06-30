@@ -154,7 +154,7 @@ while [[ true ]]; do
     shellNotify
 
     # Read the command
-    input "${userName}@${machineName}: " command
+    input "${GREEN}${userName}${C_DEFAULT}@${MAGENTA}${machineName}${C_DEFAULT}: " command
     
     # Check if the command is empty
     if [[ $(String.isNull "${command}") ]]; then
