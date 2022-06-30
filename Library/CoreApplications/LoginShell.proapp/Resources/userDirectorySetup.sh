@@ -24,12 +24,12 @@ ${userDir}/Library/history
 
 # Create the directories
 for directory in $directories; do
-    s_log "[userDirectorySetup.sh] Creating directory: $directory"
+    s_log "[userDirectorySetup] Creating directory: $directory"
     File.createDirectory "$directory"
 done
 
 # Create the files
 for file in $files; do
-    s_log "[userDirectorySetup.sh] Creating file: $file"
+    s_log "[userDirectorySetup] Creating file: $file"
     File.overwrite "$file"
 done
