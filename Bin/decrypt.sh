@@ -5,7 +5,10 @@
 @import File/attribute
 @import Security/aes-file
 
-if [[ $(String.isNull $1) ]]; then
+if [[ $(String.isNull "$(which openssl)") ]]; then
+    println "${RED}ERROR: Unsupported hardware - Unable to use AES256CommandSet."
+    exit 1
+elif [[ $(String.isNull $1) ]]; then
     println "${RED}ERROR: Missing parameter - source"
     exit 0
 elif [[ $(String.isNull $2) ]]; then
