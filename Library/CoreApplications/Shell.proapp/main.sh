@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Import required components from the runtime
+@import File/remove
 @import Hermes
 @import Foundation
 @import File/check
