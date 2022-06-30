@@ -66,9 +66,6 @@ machineName=$(Hermes.pref "System.MachineName")
 export userPermission=$(Hermes.pref "System.UserPermission_$exitCode")
 
 println "Welcome to Hermes!"
-println "You are logged in as user $userName"
-println "Your home directory is $userDir"
-println "Your machine name is $machineName"
 
 println " "
 verbose "Running login script.."
