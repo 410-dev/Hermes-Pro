@@ -1,9 +1,12 @@
 #!/bin/bash
 @import Foundation/out
+@import Foundation/string
 @import File/check
 @import File/new
 @import File/read
+@import File/remove
 @import Date
+@import NullAction
 
 function s_log() {
 	if [[ $(File.isDirectory "${LOGS}") ]]; then
@@ -69,6 +72,18 @@ function shellNotify() {
 	fi
 }
 
+function shellCommandRead() {
+	# Read command queued
+	s_log "[SHELL_COMMAND]: Reading queued command..."
+	if [[ $(File.isFile "${CACHE}/shell-command-queue") ]] ; then
+		File.readString "${CACHE}/shell-command-queue" command
+		s_log "[SHELL_COMMAND]: Queued command: ${command}"
+		echo "${command}"
+		File.removeFile "${CACHE}/shell-command-queue"
+	fi
+}
+
+
 function shellCommand() {
 	s_log "[SHELL_COMMAND]: $@"
 	if [[ $(bootargs "verbose") ]]; then
@@ -76,14 +91,72 @@ function shellCommand() {
 	fi
 
 	# Execute command
-	if [[ $(String.isNull "$1") ]] && [[ $(File.isFile "${CACHE}/shell-command-queue") ]] ; then
-		s_log "[SHELL_COMMAND]: Reading queued command..."
-		File.readString "${CACHE}/shell-command-queue" command
-		s_log "[SHELL_COMMAND]: Queued command: ${command}"
-		echo "${command}"
-		File.removeFile "${CACHE}/shell-command-queue"
-	else
+	if [[ ! $(String.isNull "$1") ]]; then
 		s_log "[SHELL_COMMAND]: Adding command to queue..."
+
+		# Shell command notified
+		# Check for command: privilage
+		if [[ "$(String.contains "$1" "privilage")" ]]; then
+			println "${YELLOW}Current process is trying to change current privilage. Accept? (Y/N)"
+			read yn
+			if [[ "$yn" == "Y" ]] || [[ "$yn" == "y" ]]; then
+				# Elevate privilage
+				Hermes.appStart "${SYSTEM}/Library/CoreApplications/Guard.proapp" exec ${1}
+				exitCode=$?
+
+				if [[ ${exitCode} == 0 ]]; then
+					NullAction.doNothing
+				else
+					println "${RED}Task unauthorized."
+					return
+				fi
+			else
+				println "${RED}Task unauthorized."
+				return
+			fi
+
+		# Check for command: pwr_shutdown
+		elif [[ "$(String.contains "$1" "pwr_shutdown")" ]]; then
+			println "${YELLOW}Current process is trying to shutdown the device. Accept? (Y/N)"
+			read yn
+			if [[ "$yn" == "Y" ]] || [[ "$yn" == "y" ]]; then
+				# Elevate privilage
+				Hermes.appStart "${SYSTEM}/Library/CoreApplications/Guard.proapp" exec ${1}
+				exitCode=$?
+
+				if [[ ${exitCode} == 0 ]]; then
+					NullAction.doNothing
+				else
+					println "${RED}Task unauthorized."
+					return
+				fi
+			else
+				println "${RED}Task unauthorized."
+				return
+			fi
+
+		# Check for command: pwr_restart
+		elif [[ "$(String.contains "$1" "pwr_restart")" ]]; then
+			println "${YELLOW}Current process is trying to reboot the device. Accept? (Y/N)"
+			read yn
+			if [[ "$yn" == "Y" ]] || [[ "$yn" == "y" ]]; then
+				# Elevate privilage
+				Hermes.appStart "${SYSTEM}/Library/CoreApplications/Guard.proapp" exec ${1}
+				exitCode=$?
+
+				if [[ ${exitCode} == 0 ]]; then
+					NullAction.doNothing
+				else
+					println "${RED}Task unauthorized."
+					return
+				fi
+			else
+				println "${RED}Task unauthorized."
+				return
+			fi
+		fi
+		
+		# Add command to queue
 		if [[ "$(File.isFile "${CACHE}/shell-command-queue")" ]]; then
 			File.append "${CACHE}/shell-command-queue" "$1"
 		else
