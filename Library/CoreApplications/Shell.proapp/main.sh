@@ -108,7 +108,7 @@ while [[ true ]]; do
 
 
     # Read shell command
-    ShellCommand="$(shellCommand)"
+    ShellCommand="$(shellCommandRead)"
 
     # Loop through every lines
     while read line; do
