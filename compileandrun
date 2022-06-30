@@ -3,6 +3,11 @@
 cd "$(dirname "$0")/../"
 pth="$PWD/System"
 
+if [[ -z "$(which shc)" ]]; then
+	echo "ERROR: SHC not installed!"
+	exit 1
+fi
+
 if [[ ! "$1" == "nocompile" ]]; then
 	echo "Sync start."
 	rm -rf "$PWD/System"
@@ -39,11 +44,14 @@ if [[ ! "$1" == "nocompile" ]]; then
 	echo "$LIST" | while read line
 	do
 		name=$(echo "$line" | cut -f 1 -d '.')
+		name2=$(echo "$line" | cut -f 2 -d '.')
+		echo "NAME2: ${name2}"
 		echo "Renaming ProApp executive: $name"
-		chmod +x "$name.proapp/main.sh" 2>/dev/null
-		mv "$name.proapp/main.sh" "$name.proapp/main" 2>/dev/null
+		chmod +x "$name.${name2}.sh" 2>/dev/null
+		mv "$name.${name2}.sh" "$name.${name2}" 2>/dev/null
 		echo "Updating resources as executable..."
 		find "$name.proapp" -name *.sh -depth -exec chmod +x {} \;
+		find "$name.proapp" -name *.sh.x -depth -exec rm {} \;
 	done
 	echo "Removing .x.c files."
 	find "$pth" -name *.x.c -depth -exec rm {} \;

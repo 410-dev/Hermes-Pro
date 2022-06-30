@@ -6,7 +6,7 @@ export secureInputSalt=""
 
 function input() {
 	if [[ ! $(String.isNull "$1") ]]; then
-		echo -n "$1"
+		echo -ne "$1"
 	fi
 	read return
 	if [[ ! $(String.isNull "$2") ]]; then
@@ -18,7 +18,7 @@ function input() {
 
 function secureInput() {
 	if [[ ! $(String.isNull "$1") ]]; then
-		echo -n "$1"
+		echo -ne "$1"
 	fi
 
 	read -s return

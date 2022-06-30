@@ -45,7 +45,7 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
         fi
     done
 
-    # Setup username
+    # Setup password
     while [[ true ]]; do
         secureInput "Enter a new password: " userPassword
         println " "
@@ -57,6 +57,21 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
             println "Password does not match. Please try again."
         fi
     done
+
+
+    # Agree to the legal statement
+    println "Before we begin, you must agree to the following legal statement:"
+    println " "
+    File.readString "${SYSTEM}/Library/legal" LEGAL
+    println "${LEGAL}"
+    println " "
+    println "Please type 'yes' to agree to the statement above."
+    println " "
+    input "Do you agree to the statement above? : " AGREE
+    if [[ ! "${AGREE}" == "yes" ]]; then
+        println "You must agree to the legal statement to continue."
+        exit 0
+    fi
 
     # Ask if the user wants to be hidden
     while [[ true ]]; do
@@ -75,7 +90,7 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
 
     # Call the init script
     verbose "Creating user directory..."
-    "$1/Resources/userDirectorySetup.sh" "$userName" "${USERS}/${userName}"
+    "$1/Resources/userDirectorySetup" "$userName" "${USERS}/${userName}"
 
     # Setup user preferences
     verbose "Setting up user preferences..."
@@ -122,6 +137,10 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
         verbose "User visible."
         Hermes.pref "System.UserHidden_${userNumID}" "false"
     fi
+
+    # Set legal flag
+    verbose "Setting up user legal flag..."
+    Hermes.userpref "${userNumID}" "System.UserLegalFlag" "${AGREE}"
 
     # Set command paths for the user
     verbose "Setting up user command paths..."

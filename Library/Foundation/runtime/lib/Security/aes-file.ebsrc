@@ -28,7 +28,7 @@ function Security.AES256FileEncrypt() {
 	fi
 
 	openssl aes-256-cbc -in "$1" -out "$1.e" -k "$2"
-	File.rename "$1.e" "$1"
+	File.rename "$1.e" "$1" overwrite
 }
 
 
@@ -53,7 +53,7 @@ function Security.AES256FileDecrypt() {
 	fi
 
 	openssl aes-256-cbc -in "$1" -out "$1.d" -d -k "$2"
-	File.rename "$1.d" "$1"
+	File.rename "$1.d" "$1" overwrite
 }
 
 export -f Security.AES256FileEncrypt

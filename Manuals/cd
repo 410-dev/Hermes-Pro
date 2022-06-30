@@ -1,0 +1,13 @@
+Hermes Pro Internal Command Set
+
+cd - Change current working directory.
+
+Parameters:
+1. Path to the directory
+
+Usage:
+cd <path>
+
+Example:
+cd Documents
+cd ../

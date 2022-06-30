@@ -4,3 +4,5 @@
 
 File.createDirectory "${CACHE}"
 File.createDirectory "${LOGS}"
+File.createDirectory "${DATA}"
+File.createDirectory "${DATA}/Applications"

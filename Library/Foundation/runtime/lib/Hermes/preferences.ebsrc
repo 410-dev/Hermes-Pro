@@ -26,9 +26,8 @@ function Hermes.pref() {
 	fi
 
 	# For security purpose, hash the preference code
-	# TODO - Comment this out for release
-	# prefCode=$(Hash.stringToSha 256 "$1")
-	prefCode=$1
+	prefCode=$(Hash.stringToSha 256 "$1")
+	# prefCode=$1
 
 	# If the second parameter is present, then use write mode.
 	# Otherwise, use read mode.
@@ -71,9 +70,8 @@ function Hermes.userpref() {
 	userDir=$(Hermes.pref "System.UserHomeDirectory_$1")
 
 	# For security purpose, hash the preference code
-	# TODO - Comment this out for release
-	# prefCode=$(Hash.stringToSha 256 "$2")
-	prefCode=$2
+	prefCode=$(Hash.stringToSha 256 "$2")
+	# prefCode=$2
 
 	# If the third parameter is present, then use write mode.
 	# Otherwise, use read mode.

@@ -36,6 +36,6 @@ if [[ "$(String.isNull "$NVRAM_FIRMWARE")" ]]; then
     }
 
     export -f NVRAM
-    export NVRAM_FIRMWARE="Hermes Pro Driver-level Emulated NVRAM"
+    export NVRAM_FIRMWARE="Hermes Pro D-Level Emulated NVRAM"
     export NVRAM_VERSION="1.0.0Alpha1"
 fi

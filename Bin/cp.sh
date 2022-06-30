@@ -14,7 +14,7 @@ fi
 
 if [[ $(File.exists "$(pwd)/$1") ]]; then
 
-    Hermes.appStart "${SYSTEM}/Library/CoreApplications/Guard.proapp" fs r "$(pwd)/$2"
+    Hermes.appStart "${SYSTEM}/Library/CoreApplications/Guard.proapp" fs r "$(pwd)/$1"
     if [[ ! $? == 0 ]]; then
         exit 0
     fi

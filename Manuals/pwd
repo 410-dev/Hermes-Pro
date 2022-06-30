@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+pwd - Show current working directory
+
+Parameters:
+none
+
+Usage:
+pwd
+
+Example:
+pwd

@@ -1,0 +1,13 @@
+Hermes Pro Internal Command Set
+
+mv - Move or rename a file or directory
+
+Parameters:
+1. Path to the file or directory to move
+2. Path to the new location
+
+Usage:
+mv <file> <new location>
+
+Example:
+mv ./originalFile.txt ./Documents/originalFile.txt

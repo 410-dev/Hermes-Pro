@@ -1,0 +1,14 @@
+Hermes Pro Internal Command Set
+
+help - Display this help message.
+
+Parameters:
+1. [Optional] Command
+
+Usage:
+help
+help <command>
+
+Example:
+help
+help shutdown

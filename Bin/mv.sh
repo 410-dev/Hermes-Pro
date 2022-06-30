@@ -27,4 +27,3 @@ if [[ $(File.exists "$(pwd)/$1") ]]; then
 else
     println "${RED}ERROR: $@ does not exist."
 fi
-

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Import required components from the runtime
+@import File/remove
 @import Hermes
 @import Foundation
 @import File/check
@@ -65,9 +66,6 @@ machineName=$(Hermes.pref "System.MachineName")
 export userPermission=$(Hermes.pref "System.UserPermission_$exitCode")
 
 println "Welcome to Hermes!"
-println "You are logged in as user $userName"
-println "Your home directory is $userDir"
-println "Your machine name is $machineName"
 
 println " "
 verbose "Running login script.."
@@ -110,7 +108,7 @@ while [[ true ]]; do
 
 
     # Read shell command
-    ShellCommand="$(shellCommand)"
+    ShellCommand="$(shellCommandRead)"
 
     # Loop through every lines
     while read line; do
@@ -156,7 +154,7 @@ while [[ true ]]; do
     shellNotify
 
     # Read the command
-    input "${userName}@${machineName}: " command
+    input "${GREEN}${userName}${C_DEFAULT}@${MAGENTA}${machineName}${C_DEFAULT}: " command
     
     # Check if the command is empty
     if [[ $(String.isNull "${command}") ]]; then

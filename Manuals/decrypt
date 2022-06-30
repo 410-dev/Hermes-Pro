@@ -1,0 +1,15 @@
+Hermes Pro Internal Command Set
+
+decrypt - Decrypt a file using AES 256 bit encryption.
+          This requires OpenSSL, which needs to be supported by the host.
+
+Parameters:
+1. Path to source file
+2. Path to destination file
+3. Key
+
+Usage:
+decrypt <source> <destination> <key>
+
+Example:
+decrypt ./encrypted.txt ./raw-text.txt password1234

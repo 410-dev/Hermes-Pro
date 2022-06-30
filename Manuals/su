@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+su - Elevate shell permission. This requires user's password.
+
+Parameters:
+none
+
+Usage:
+su
+
+Example:
+su

@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+unsu - Restore the original user permissions.
+
+Parameters:
+none
+
+Usage:
+unsu
+
+Example:
+unsu
