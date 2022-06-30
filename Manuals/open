@@ -16,5 +16,5 @@ open <application name>
 open <application name> <arguments>
 
 Example:
-open SystemPreferences
-open SystemPreferences argument1 argument2 argument3
+open Preferences
+open Preferences argument1 argument2 argument3
