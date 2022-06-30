@@ -1,2 +1,5 @@
 #!/bin/bash
-echo "Hi"
+@import Foundation/out
+
+println "${RED}Application is not ready yet."
+
