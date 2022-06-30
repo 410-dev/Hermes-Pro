@@ -1,11 +1,13 @@
 #!/bin/bash
 
-
 # Rename $@ to $BOOTARGS
 export BOOTARGS="$@"
 
 # Directly start the foundation
 while [[ true ]]; do
+
+    clear
+
 
     # Load partition information
     source "$(dirname "$0")/Partitions"
