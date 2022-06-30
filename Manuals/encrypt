@@ -1,6 +1,6 @@
 Hermes Pro Internal Command Set
 
-encrypt - Encrypt a message using AES 256 bit encryption.
+encrypt - Encrypt a file using AES 256 bit encryption.
           This requires OpenSSL, which needs to be supported by the host.
 
 Parameters:
@@ -12,4 +12,4 @@ Usage:
 encrypt <source> <destination> <key>
 
 Example:
-encrypt ./raw-file.txt ./encrypted.txt password1234
+encrypt ./raw-text.txt ./encrypted.txt password1234
