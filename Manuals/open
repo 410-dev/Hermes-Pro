@@ -13,7 +13,8 @@ Parameters:
 
 Usage:
 open <application name>
+open <application name> <arguments>
 
 Example:
-open System Preferences
-open System Preferences "argument1 argument2 argument3"
+open SystemPreferences
+open SystemPreferences argument1 argument2 argument3
