@@ -3,6 +3,11 @@
 cd "$(dirname "$0")/../"
 pth="$PWD/System"
 
+if [[ -z "$(which shc)" ]]; then
+	echo "ERROR: SHC not installed!"
+	exit 1
+fi
+
 if [[ ! "$1" == "nocompile" ]]; then
 	echo "Sync start."
 	rm -rf "$PWD/System"
