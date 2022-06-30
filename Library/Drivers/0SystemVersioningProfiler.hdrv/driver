@@ -3,5 +3,6 @@
 export OS_VERSION="1.0 Internal Test Release 1"
 export OS_TESTVERSION="true"
 export OS_NAME="Hermes Pro"
-export OS_CODENAME="Achasan"
+export OS_CODENAME="Frontier"
 export OS_BUILD="22H0219A"
+export OS_BIN_SET="$OS_VERSION"
