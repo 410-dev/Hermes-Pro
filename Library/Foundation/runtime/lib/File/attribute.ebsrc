@@ -24,12 +24,16 @@ function File.relocate() {
 	if [[ $(String.isNull "$1") ]] || [[ $(String.isNull "$2") ]]; then
 		syntaxException "File.relocate - Parameters are not properly given."
 	else
-		if [[ $(File.exists "$2") ]]; then
-			runtimeException "File.relocate - There is already a file with the same name as destination: $1"
+		if [[ $(File.exists "$2") ]] && [[ ! "$3" == "overwrite" ]]; then
+			runtimeException "File.relocate - There is already a file with the same name as destination: $2"
 		elif [[ ! $(File.exists "$1") ]]; then
 			runtimeException "File.relocate - No such file or directory: $1"
 		else
-			mv "$1" "$2"
+			if [[ "$3" == "overwrite" ]]; then
+				mv -f "$1" "$2"
+			else
+				mv "$1" "$2"
+			fi
 		fi
 	fi
 }
@@ -38,7 +42,7 @@ function File.rename() {
 	if [[ $(String.isNull "$1") ]] || [[ $(String.isNull "$2") ]]; then
 		syntaxException "File.rename - Parameters are not properly given."
 	else
-		File.relocate "$1" "$2"
+		File.relocate "$1" "$2" "$3"
 	fi
 }
 
