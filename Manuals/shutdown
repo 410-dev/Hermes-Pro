@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+shutdown - Stop machine operation.
+
+Parameters:
+none
+
+Usage:
+shutdown
+
+Example:
+shutdown

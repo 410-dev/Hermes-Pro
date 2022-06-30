@@ -1,0 +1,19 @@
+Hermes Pro Internal Command Set
+
+open - Open an application
+
+Note:
+Application must be installed in the correct location.
+Open command will automatically search from the designated location, and if not found, it won't open the application.
+Default designated location is /Data/Applications and /Data/Users/<user>/Applications.
+
+Parameters:
+1. Application name
+2. [Optional] Arguments
+
+Usage:
+open <application name>
+
+Example:
+open System Preferences
+open System Preferences "argument1 argument2 argument3"

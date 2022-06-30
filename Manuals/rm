@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+rm - Remove a file or directory
+
+Parameters:
+1. File or directory to remove
+
+Usage:
+rm <file>
+
+Example:
+rm ./test.txt

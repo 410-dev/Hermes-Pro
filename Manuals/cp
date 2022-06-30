@@ -1,0 +1,13 @@
+Hermes Pro Internal Command Set
+
+cp - Copy file or directory
+
+Parameters:
+1. Source file or directory
+2. Destination directory
+
+Usage:
+cp <source> <destination>
+
+Example:
+cp ./file.txt ./Documents

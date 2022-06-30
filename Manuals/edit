@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+edit - Edit text document.
+
+Parameters:
+1. Path to text document to edit.
+
+Usage:
+edit <path>
+
+Example:
+edit ./file.txt

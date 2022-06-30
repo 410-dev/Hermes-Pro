@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+permission - Show current shell permission.
+
+Parameters:
+none
+
+Usage:
+permission
+
+Example:
+permission

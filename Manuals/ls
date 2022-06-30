@@ -1,0 +1,14 @@
+Hermes Pro Internal Command Set
+
+ls - List files in directory.
+
+Parameters:
+1. [Optional] Path to directory to list. Default is current directory.
+
+Usage:
+ls
+ls <path>
+
+Example:
+ls
+ls ./Documents

@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+mkdir - Create a directory
+
+Parameters:
+1. Directory name
+
+Usage:
+mkdir <directory name>
+
+Example:
+mkdir newFolder

@@ -1,0 +1,12 @@
+Hermes Pro Internal Command Set
+
+reboot - Restart machine from the bootloader.
+
+Parameters:
+none
+
+Usage:
+reboot
+
+Example:
+reboot
