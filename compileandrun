@@ -24,12 +24,14 @@ if [[ ! "$1" == "nocompile" ]]; then
 
 	# .sh
 	LIST=$(find "$pth" -name *.sh -depth)
+	echo ".sh files:"
+	echo "$LIST"
 	echo "$LIST" | while read line
 	do
 		cd "$(dirname "$line")"
 		echo "PROCESSING: $line"
-		shc -r -f "$line" 2>/dev/null
-		echo "BUILDING: $line"
+		shc -r -f "$line"
+		echo "BUILDING:   $line"
 		gcc "$line.x.c" -o "$line"
 		name=$(echo "$line" | cut -f 1 -d '.')
 		mv "$name.sh" "$name" 2>/dev/null
@@ -45,7 +47,6 @@ if [[ ! "$1" == "nocompile" ]]; then
 	do
 		name=$(echo "$line" | cut -f 1 -d '.')
 		name2=$(echo "$line" | cut -f 2 -d '.')
-		echo "NAME2: ${name2}"
 		echo "Renaming ProApp executive: $name"
 		chmod +x "$name.${name2}.sh" 2>/dev/null
 		mv "$name.${name2}.sh" "$name.${name2}" 2>/dev/null
