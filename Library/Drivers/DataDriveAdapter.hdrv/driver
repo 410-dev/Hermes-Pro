@@ -1,0 +1,8 @@
+#!/bin/bash
+
+@import File/new
+
+File.createDirectory "${CACHE}"
+File.createDirectory "${LOGS}"
+File.createDirectory "${DATA}"
+File.createDirectory "${DATA}/Applications"

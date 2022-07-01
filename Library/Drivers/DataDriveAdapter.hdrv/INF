@@ -1,0 +1,4 @@
+export DRVNAME="DataDriveAdapter"
+export DRVVER="1.0"
+export DRVAUTHOR="Hermes Pro"
+export DRVDESCRIPTION="This driver is used to create all necessary directories inside the data partition."

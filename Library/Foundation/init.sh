@@ -240,12 +240,6 @@ do
 done <<< "$services"
 unset services service
 
-# Open data drive adapter app
-Hermes.appStart "${SYSTEM}/Library/CoreApplications/DataDriveAdapter.proapp"
-if [[ "${?}" != "0" ]]; then
-    verbose_err "Data drive creation rejected." "init"
-    exit 0
-fi
 
 # 
 # System preparation is completed at this point.
