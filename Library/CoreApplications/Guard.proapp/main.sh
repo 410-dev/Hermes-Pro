@@ -27,10 +27,10 @@ function checkPassword() {
     println " "
 
     if [[ $(Hermes.pref "System.UserPassword_${userID}") == "$(Hash.stringToSha 256 "${userPassword}")" ]]; then
-        s_log "[Guard] Password correct."
+        verbose "Password correct." "Guard"
         return 0
     else
-        s_log "[Guard] Password incorrect."
+        verbose_err "Password incorrect." "Guard"
         # If the login attempt is 3 times, exit the script.
         if [[ ${attempts} == 3 ]]; then
             println "${RED}Unable to authenticate."
@@ -58,9 +58,9 @@ function fsCheck() {
     mode="$3"
     queryPath="$4"
 
-    s_log "[Guard] User has permission of ${userPermission} and action is ${mode}."
-    s_log "[Guard] Scanning entitlements..."
-    s_log "[Guard] Checking if the query path is valid..."
+    verbose "User has permission of ${userPermission} and action is ${mode}." "Guard"
+    verbose "Scanning entitlements..." "Guard"
+    verbose "Checking if the query path is valid..." "Guard"
 
     # Check if the query path is file or directory
     if [[ ! $(File.isDirectory "${queryPath}") ]]; then
@@ -72,18 +72,18 @@ function fsCheck() {
     queryPath="$(pwd)"
     cd "${WORKING}"
 
-    s_log "[Guard] Query path is ${queryPath}."
+    verbose "Query path is ${queryPath}." "Guard"
 
     # If it tries to escape the disk, stop it.
     if [[ $(isFrontGreater ${#ROOTFS} ${#queryPath}) ]]; then
-        s_log "[Guard] Operation not permitted."
+        verbose_err "Operation not permitted." "Guard"
         println "${RED}Operation not permitted."
         return 1
     fi
 
     # If the user has highest permission and action is reading, then return success regardless of path
     if [[ "$userPermission" == 0 ]] && [[ "$mode" == "READ" ]]; then
-        s_log "[Guard] Operation permitted."
+        verbose "Operation permitted." "Guard"
         return 0
     fi
 
@@ -92,11 +92,11 @@ function fsCheck() {
         # If the user has highest permission, then check only write mode
         # If the user with highest permission tries to write to system directory, stop it.
         if [[ "$mode" == "WRITE" ]] && [[ "$queryPath" == "${SYSTEM}/"* ]]; then
-            s_log "[Guard] Operation not permitted."
+            verbose_err "Operation not permitted." "Guard"
             println "${RED}Operation not permitted."
             return 1
         fi
-        s_log "[Guard] Operation permitted."
+        verbose "Operation permitted." "Guard"
         return 0
     elif [[ "$userPermission" == 10 ]]; then
         # Check both read and write mode.
@@ -106,7 +106,7 @@ function fsCheck() {
             [[ "$queryPath" == "${ROOTFS}" ]] || 
             [[ "$queryPath" == "${DATA}/Preferences/"* ]] || [[ "$queryPath" == "${DATA}/Preferences" ]] || 
             [[ "$queryPath" == "${ROOTFS}/NVRAM/"* ]] || [[ "$queryPath" == "${ROOTFS}/NVRAM" ]]; then
-                s_log "[Guard] Operation not permitted."
+                verbose_err "Operation not permitted." "Guard"
                 println "${RED}Operation not permitted."
                 return 1
             fi
@@ -115,7 +115,7 @@ function fsCheck() {
         # If the user with permission of 10 tries to read /System, stop it.
         if [[ "$mode" == "READ" ]]; then
             if [[ "$queryPath" == "${SYSTEM}/"* ]] || [[ "$queryPath" == "${SYSTEM}" ]]; then
-                s_log "[Guard] Operation not permitted."
+                verbose_err "Operation not permitted." "Guard"
                 println "${RED}Operation not permitted."
                 return 1
             fi
@@ -127,24 +127,24 @@ function fsCheck() {
 
 
 if [[ "$2" == "exec" ]]; then
-    s_log "[Guard] Task execution authentication started."
+    verbose "Task execution authentication started." "Guard"
     checkPassword 1
     if [[ $? == 0 ]]; then
         exit 0
     else
-        s_log "[Guard] Authentication failed."
+        verbose_err "Authentication failed." "Guard"
         exit 1
     fi
 elif [[ "$2" == "fs" ]]; then
-    s_log "[Guard] File system authentication started."
+    verbose "File system authentication started." "Guard"
     if [[ "$3" == "r" ]]; then
-        s_log "[Guard] Access mode: READ"
+        verbose "Access mode: READ" "Guard"
         fsCheck "$1" "$2" "READ" "$4"
     elif [[ "$3" == "w" ]]; then
-        s_log "[Guard] Access mode: WRITE"
+        verbose "Access mode: WRITE" "Guard"
         fsCheck "$1" "$2" "WRITE" "$4"
     fi
 else
-    s_log "[Guard] Unknown task: $2"
+    verbose_err "Unknown task: $2" "Guard"
     exit 1
 fi

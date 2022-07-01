@@ -10,7 +10,7 @@ isUserSetupComplete=$(Hermes.pref "System.UserCounts")
 if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
     # Create a new user
     dousersetup=true
-    s_log "[LoginShell.proapp] Creating a new user..."
+    s_log "[LoginShell] Creating a new user..."
     
     while [[ true ]]; do
         input "Enter a new username: " userName
@@ -89,66 +89,66 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
     println "Setting things up..."
 
     # Call the init script
-    verbose "Creating user directory..." "LoginShell.proapp"
+    verbose "Creating user directory..." "LoginShell"
     "$1/Resources/userDirectorySetup" "$userName" "${USERS}/${userName}"
 
     # Setup user preferences
-    verbose "Setting up user preferences..." "LoginShell.proapp"
+    verbose "Setting up user preferences..." "LoginShell"
 
     # Update user count
-    verbose "Updating user count..." "LoginShell.proapp"
+    verbose "Updating user count..." "LoginShell"
     int userCounts=0
     add "${userCounts}" 1 userCounts
-    verbose "User count: ${userCounts}" "LoginShell.proapp"
+    verbose "User count: ${userCounts}" "LoginShell"
     Hermes.pref "System.UserCounts" "${userCounts}"
-    verbose "User count updated." "LoginShell.proapp"
+    verbose "User count updated." "LoginShell"
 
     # User identifiable integer ID
-    verbose "Setting up user ID..." "LoginShell.proapp"
+    verbose "Setting up user ID..." "LoginShell"
     int userNumID=$userCounts
     add "${userNumID}" 2 userNumID
     Hermes.pref "System.UserHomeDirectory_${userNumID}" "${USERS}/${userName}"
-    verbose "User home directory set." "LoginShell.proapp"
-    verbose "User ID: ${userNumID}" "LoginShell.proapp"
-    verbose "Setting global user ID..." "LoginShell.proapp"
+    verbose "User home directory set." "LoginShell"
+    verbose "User ID: ${userNumID}" "LoginShell"
+    verbose "Setting global user ID..." "LoginShell"
     Hermes.pref "System.UserID_${userNumID}" "${userName}"
-    verbose "Setting user NID..." "LoginShell.proapp"
+    verbose "Setting user NID..." "LoginShell"
     Hermes.userpref "${userNumID}" "System.UserNumID" "${userNumID}"
-    verbose "User ID set." "LoginShell.proapp"
+    verbose "User ID set." "LoginShell"
    
 
     # Set user password
-    verbose "Setting up user password..." "LoginShell.proapp"
+    verbose "Setting up user password..." "LoginShell"
     Hermes.pref "System.UserPassword_${userNumID}" "$(Hash.stringToSha 256 "${userPassword}")"
-    verbose "User password set." "LoginShell.proapp"
+    verbose "User password set." "LoginShell"
 
 
     # Set user permission
-    verbose "Setting up user permission..." "LoginShell.proapp"
+    verbose "Setting up user permission..." "LoginShell"
     Hermes.pref "System.UserPermission_${userNumID}" "10"
-    verbose "User permission set." "LoginShell.proapp"
+    verbose "User permission set." "LoginShell"
 
     # Set user hidden
-    verbose "Setting up user hidden/nohidden..." "LoginShell.proapp"
+    verbose "Setting up user hidden/nohidden..." "LoginShell"
     if [[ ${userHidden} == "y" ]] || [[ ${userHidden} == "Y" ]]; then
-        verbose "User hidden." "LoginShell.proapp"
+        verbose "User hidden." "LoginShell"
         Hermes.pref "System.UserHidden_${userNumID}" "true"
     else
-        verbose "User visible." "LoginShell.proapp"
+        verbose "User visible." "LoginShell"
         Hermes.pref "System.UserHidden_${userNumID}" "false"
     fi
 
     # Set legal flag
-    verbose "Setting up user legal flag..." "LoginShell.proapp"
+    verbose "Setting up user legal flag..." "LoginShell"
     Hermes.userpref "${userNumID}" "System.UserLegalFlag" "${AGREE}"
 
     # Set command paths for the user
-    verbose "Setting up user command paths..." "LoginShell.proapp"
+    verbose "Setting up user command paths..." "LoginShell"
     Hermes.userpref "${userNumID}" "System.CommandPaths" "${SYSTEM}/Bin;"
 
     # Set user setup done
     Hermes.userpref "${userNumID}" "System.UserSetupDone" "true"
-    verbose "User setup done flag wrote." "LoginShell.proapp"
+    verbose "User setup done flag wrote." "LoginShell"
 
     # Return the login code
     exit ${userNumID}
@@ -173,15 +173,15 @@ if [[ $dousersetup != "true" ]]; then
     int userid=3
     int maxUserID=${userCounts}
     add "${maxUserID}" 2 maxUserID
-    verbose "Max user ID: ${maxUserID}" "LoginShell.proapp"
+    verbose "Max user ID: ${maxUserID}" "LoginShell"
     while [[ $(isFrontLesser ${userid} ${maxUserID}) ]] || [[ ${userid} == ${maxUserID} ]]; do
         userName=$(Hermes.pref "System.UserID_${userid}")
         if [[ $(Hermes.pref "System.UserHidden_${userid}") == "false" ]]; then
-            verbose "User ${userName} is visible." "LoginShell.proapp"
+            verbose "User ${userName} is visible." "LoginShell"
             userIDList+=(${userid})
             userNameList+=(${userName})
         elif [[ $(Hermes.pref "System.UserHidden_${userid}") == "true" ]]; then
-            verbose "User ${username} is hidden." "LoginShell.proapp"
+            verbose "User ${username} is hidden." "LoginShell"
             hiddenUserIDList+=(${userid})
             hiddenUserNameList+=(${userName})
         fi
@@ -189,7 +189,7 @@ if [[ $dousersetup != "true" ]]; then
     done
 
     # Show the list of users
-    s_log "Showing user list..."
+    verbose "Showing user list..." "LoginShell"
     println "User list:"
     int i=0
     while [[ $(isFrontLesser ${i} ${#userNameList[@]}) ]]; do
@@ -223,10 +223,10 @@ if [[ $dousersetup != "true" ]]; then
         println " "
 
         if [[ $(Hermes.pref "System.UserPassword_${userID}") == "$(Hash.stringToSha 256 "${userPassword}")" ]]; then
-            s_log "Password correct."
+            verbose "Password correct." "LoginShell"
             return 0
         else
-            s_log "Password incorrect."
+            verbose "Password incorrect." "LoginShell"
             # If the login attempt is 5 times, then shutdown the system.
             if [[ ${attempts} == 5 ]]; then
                 println "Unable to continue login procedure. Shutting down system."
@@ -262,7 +262,7 @@ if [[ $dousersetup != "true" ]]; then
 
             # If user exists, then ask for password
             if [[ ${found} ]]; then
-                s_log "User ${userName} found."
+                verbose "User ${userName} found." "LoginShell"
                 subtract $userSelection 1 userSelection
                 checkPassword "${hiddenUserIDList[$i]}" 1
                 status=$?
