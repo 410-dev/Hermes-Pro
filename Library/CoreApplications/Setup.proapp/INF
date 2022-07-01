@@ -1,7 +1,7 @@
-export BUNDLE_NAME="Shell"
+export BUNDLE_NAME="Setup"
 export BUNDLE_VERSION=1.0
 export BUNDLE_BUILD=1
 export BUNDLE_SDK=1
 export BUNDLE_AUTHOR="Hermes Pro"
 export BUNDLE_EXECUTIVE="HeliumNative"
-export BUNDLE_ID="os.shell"
+export BUNDLE_ID="os.setup"
