@@ -7,13 +7,13 @@ function Hermes.appStart() {
 
 	# If the first parameter is null, the throw error
 	if [[ $(String.isNull "$1") ]]; then
-		verbose_err "No application specified"
+		verbose_err "No application specified" "_FOUNDATIONRUNTIME_HERMES_APPLICATION_APPSTART_"
 		println "${RED}Error: Application is not specified at parameter 1."
 		return 100
 
 	# If the appbundle/main and appbundle/INF are not found, throw an error.
 	elif [[ ! $(File.isFile "$1"/main) ]] || [[ ! $(File.isFile "$1"/INF) ]]; then
-		verbose_err "Not an application: $1"
+		verbose_err "Not an application: $1" "_FOUNDATIONRUNTIME_HERMES_APPLICATION_APPSTART_"
 		println "${RED}Unable to open application: ${1} is not a proper application."
 		return 101
 
@@ -29,7 +29,7 @@ function Hermes.appStart() {
 			[[ $(String.isNull "${BUNDLE_AUTHOR}") ]] ||
 			[[ $(String.isNull "${BUNDLE_EXECUTIVE}") ]] ||
 			[[ $(String.isNull "${BUNDLE_ID}") ]]; then
-			verbose_err "Application information is incomplete"
+			verbose_err "Application information is incomplete" "_FOUNDATIONRUNTIME_HERMES_APPLICATION_APPSTART_"
 			println "${RED}Unable to open application: Application information is incomplete."
 			return 102
 		else

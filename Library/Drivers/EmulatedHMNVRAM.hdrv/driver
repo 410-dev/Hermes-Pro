@@ -26,7 +26,7 @@ if [[ "$(String.isNull "$NVRAM_FIRMWARE")" ]]; then
                 cat "${ROOTFS}/NVRAM/${1}.nvrdat"
             else
                 # Return error
-                verbose "NVRAM data $1 not found."
+                verbose "NVRAM data $1 not found." "EmulatedNVRAM"
                 return 2
             fi
         else

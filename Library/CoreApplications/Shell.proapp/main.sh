@@ -58,7 +58,7 @@ userDirCheck=$?
 
 # If the user directory is not found, then exit with reboot signal
 if [[ $userIDCheck == 2 ]] || [[ ! $(File.isDirectory "$userDir") ]]; then
-    verbose_err "User directory \"$userDir\" not found!!"
+    verbose_err "User directory \"$userDir\" not found!!" "Shell.proapp"
     exit 1
 fi
 
@@ -68,7 +68,7 @@ export userPermission=$(Hermes.pref "System.UserPermission_$exitCode")
 println "Welcome to Hermes!"
 
 println " "
-verbose "Running login script.."
+verbose "Running login script.." "Shell.proapp"
 
 # Run login scripts
 cd "${userDir}/Library/LoginScript"
@@ -78,13 +78,13 @@ while read loginScript
 do
     if [[ ! $(String.isNull "${loginScript}") ]]; then
         # Source it
-        verbose "Running login script: ${loginScript}"
+        verbose "Running login script: ${loginScript}" "Shell.proapp"
         chmod +x "${userDir}/Library/LoginScript/${loginScript}"
         print "${DARK_GRAY}"
         @include "${userDir}/Library/LoginScript/${loginScript}"
         exitStatus="$?"
         if [[ "${exitStatus}" != "0" ]]; then
-            verbose_err "Failed running login script: ${loginScript}"
+            verbose_err "Failed running login script: ${loginScript}" "Shell.proapp"
         fi
     fi
 done <<< "$loginScripts"
@@ -114,7 +114,7 @@ while [[ true ]]; do
     while read line; do
         # If the line is not empty, then execute it
         if [[ ! $(String.isNull "${line}") ]]; then
-            s_log "[Shell.proapp] Executing command: ${line}"
+            verbose "Executing command: ${line}" "Shell.proapp"
             
             # Execute the command
             if [[ "${line}" == "pwr_restart" ]]; then
@@ -135,7 +135,7 @@ while [[ true ]]; do
 
                 # Get the directory
                 dirPath="${line#sh_changedirectory }"
-                verbose "Changing directory to: ${dirPath}"
+                verbose "Changing directory to: ${dirPath}" "Shell.proapp"
 
                 # Check if the directory exists
                 if [[ "$(File.isDirectory "$dirPath")" ]]; then
@@ -187,7 +187,7 @@ while [[ true ]]; do
         # Check if the command is in the directory
         if [[ $(File.isFile "${pathArray[$i]}/${commandArray[0]}") ]]; then
             # Execute the command
-            verbose "Executing command: ${commandArray[0]}"
+            verbose "Executing command: ${commandArray[0]}" "Shell.proapp"
             s_log "[Shell.proapp] Executing command: ${commandArray[0]}"
             
             "${pathArray[$i]}/${commandArray[0]}" "${commandArray[@]:1}"
@@ -195,7 +195,10 @@ while [[ true ]]; do
 
             # Check if the exit status is not 0
             if [[ "${exitStatus}" != "0" ]]; then
-                verbose_err "Failed running command: ${commandArray[0]}"
+                verbose_err "Failed running command: ${commandArray[0]}" "Shell.proapp"
+            else
+                verbose "Successfully ran command: ${commandArray[0]}" "Shell.proapp"
+                verbose "Process exited with status: ${exitStatus}" "Shell.proapp"
             fi
             unset exitStatus
 

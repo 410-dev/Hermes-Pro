@@ -89,66 +89,66 @@ if [[ ${isUserSetupComplete} == 0 ]] || [[ "$2" == "newUserAccount" ]]; then
     println "Setting things up..."
 
     # Call the init script
-    verbose "Creating user directory..."
+    verbose "Creating user directory..." "LoginShell.proapp"
     "$1/Resources/userDirectorySetup" "$userName" "${USERS}/${userName}"
 
     # Setup user preferences
-    verbose "Setting up user preferences..."
+    verbose "Setting up user preferences..." "LoginShell.proapp"
 
     # Update user count
-    verbose "Updating user count..."
+    verbose "Updating user count..." "LoginShell.proapp"
     int userCounts=0
     add "${userCounts}" 1 userCounts
-    verbose "User count: ${userCounts}"
+    verbose "User count: ${userCounts}" "LoginShell.proapp"
     Hermes.pref "System.UserCounts" "${userCounts}"
-    verbose "User count updated."
+    verbose "User count updated." "LoginShell.proapp"
 
     # User identifiable integer ID
-    verbose "Setting up user ID..."
+    verbose "Setting up user ID..." "LoginShell.proapp"
     int userNumID=$userCounts
     add "${userNumID}" 2 userNumID
     Hermes.pref "System.UserHomeDirectory_${userNumID}" "${USERS}/${userName}"
-    verbose "User home directory set."
-    verbose "User ID: ${userNumID}"
-    verbose "Setting global user ID..."
+    verbose "User home directory set." "LoginShell.proapp"
+    verbose "User ID: ${userNumID}" "LoginShell.proapp"
+    verbose "Setting global user ID..." "LoginShell.proapp"
     Hermes.pref "System.UserID_${userNumID}" "${userName}"
-    verbose "Setting user NID..."
+    verbose "Setting user NID..." "LoginShell.proapp"
     Hermes.userpref "${userNumID}" "System.UserNumID" "${userNumID}"
-    verbose "User ID set."
+    verbose "User ID set." "LoginShell.proapp"
    
 
     # Set user password
-    verbose "Setting up user password..."
+    verbose "Setting up user password..." "LoginShell.proapp"
     Hermes.pref "System.UserPassword_${userNumID}" "$(Hash.stringToSha 256 "${userPassword}")"
-    verbose "User password set."
+    verbose "User password set." "LoginShell.proapp"
 
 
     # Set user permission
-    verbose "Setting up user permission..."
+    verbose "Setting up user permission..." "LoginShell.proapp"
     Hermes.pref "System.UserPermission_${userNumID}" "10"
-    verbose "User permission set."
+    verbose "User permission set." "LoginShell.proapp"
 
     # Set user hidden
-    verbose "Setting up user hidden/nohidden..."
+    verbose "Setting up user hidden/nohidden..." "LoginShell.proapp"
     if [[ ${userHidden} == "y" ]] || [[ ${userHidden} == "Y" ]]; then
-        verbose "User hidden."
+        verbose "User hidden." "LoginShell.proapp"
         Hermes.pref "System.UserHidden_${userNumID}" "true"
     else
-        verbose "User visible."
+        verbose "User visible." "LoginShell.proapp"
         Hermes.pref "System.UserHidden_${userNumID}" "false"
     fi
 
     # Set legal flag
-    verbose "Setting up user legal flag..."
+    verbose "Setting up user legal flag..." "LoginShell.proapp"
     Hermes.userpref "${userNumID}" "System.UserLegalFlag" "${AGREE}"
 
     # Set command paths for the user
-    verbose "Setting up user command paths..."
+    verbose "Setting up user command paths..." "LoginShell.proapp"
     Hermes.userpref "${userNumID}" "System.CommandPaths" "${SYSTEM}/Bin;"
 
     # Set user setup done
     Hermes.userpref "${userNumID}" "System.UserSetupDone" "true"
-    verbose "User setup done flag wrote."
+    verbose "User setup done flag wrote." "LoginShell.proapp"
 
     # Return the login code
     exit ${userNumID}
@@ -173,15 +173,15 @@ if [[ $dousersetup != "true" ]]; then
     int userid=3
     int maxUserID=${userCounts}
     add "${maxUserID}" 2 maxUserID
-    verbose "Max user ID: ${maxUserID}"
+    verbose "Max user ID: ${maxUserID}" "LoginShell.proapp"
     while [[ $(isFrontLesser ${userid} ${maxUserID}) ]] || [[ ${userid} == ${maxUserID} ]]; do
         userName=$(Hermes.pref "System.UserID_${userid}")
         if [[ $(Hermes.pref "System.UserHidden_${userid}") == "false" ]]; then
-            verbose "User ${userName} is visible."
+            verbose "User ${userName} is visible." "LoginShell.proapp"
             userIDList+=(${userid})
             userNameList+=(${userName})
         elif [[ $(Hermes.pref "System.UserHidden_${userid}") == "true" ]]; then
-            verbose "User ${username} is hidden."
+            verbose "User ${username} is hidden." "LoginShell.proapp"
             hiddenUserIDList+=(${userid})
             hiddenUserNameList+=(${userName})
         fi

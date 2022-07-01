@@ -24,21 +24,21 @@ function bootargs() {
 }
 
 function verbose() {
-	s_log "[VERBOSE]: $@"
+	s_log "[VERBOSE] [$2]: $@"
 	if [[ $(bootargs "verbose") ]]; then
 		println "${GREEN}[+]: $@"
 	fi
 }
 
 function verbose_err() {
-	s_log "[VERBOSE_ERR]: $@"
+	s_log "[VERBOSE_ERR] [$2]: $@"
 	if [[ $(bootargs "verbose") ]]; then
 		println "${RED}[-]: $@"
 	fi
 }
 
 function verbose_warn() {
-	s_log "[VERBOSE_WARN]: $@"
+	s_log "[VERBOSE_WARN] [$2]: $@"
 	if [[ $(bootargs "verbose") ]]; then
 		println "${YELLOW}[!]: $@"
 	fi
