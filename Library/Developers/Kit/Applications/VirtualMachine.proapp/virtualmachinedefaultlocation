@@ -1,0 +1,2 @@
+
+export DEFAULT_VM_LOCATION="$userDir/Library/VirtualMachines"
