@@ -3,6 +3,29 @@
 cd "$(dirname "$0")/../"
 pth="$PWD/System"
 
+function String.isNull() {
+	export testfor="$1"
+	if [[ -z "$testfor" ]] || [[ "$testfor" == "$NULL" ]]; then
+		echo "true"
+	fi
+	unset testfor
+}
+
+function String.replace() {
+	if [[ $(String.isNull "$1") ]] && [[ $(String.isNull "$2") ]] && [[ $(String.isNull "$3") ]]; then
+		echo "String.replace - Not enough parameters given."
+		exit
+	fi
+	export buffer="$(echo "$1" | sed "s/$2/$3/g")"
+	if [[ $(String.isNull "$4") ]]; then
+		echo "$buffer"
+		unset buffer
+	else
+		export $4="$buffer"
+		unset buffer
+	fi
+}
+
 if [[ -z "$(which shc)" ]]; then
 	echo "ERROR: SHC not installed!"
 	exit 1
@@ -36,26 +59,25 @@ if [[ ! "$1" == "nocompile" ]]; then
 		name=$(echo "$line" | cut -f 1 -d '.')
 		mv "$name.sh" "$name" 2>/dev/null
 	done
-	echo "Removing .sh.x.c files."
-	find "$pth" -name *.sh.x.c -depth -exec rm {} \;
-
-
 
 	# .proapp
 	LIST=$(find "$pth" -name *.sh -depth)
 	echo "$LIST" | while read line
 	do
-		name=$(echo "$line" | cut -f 1 -d '.')
-		name2=$(echo "$line" | cut -f 2 -d '.')
+		name="$(String.replace "$line" ".sh" "")"
 		echo "Renaming ProApp executive: $name"
-		chmod +x "$name.${name2}.sh" 2>/dev/null
-		mv "$name.${name2}.sh" "$name.${name2}" 2>/dev/null
+		chmod +x "$line" 2>/dev/null
+		mv "$line" "$name" 2>/dev/null
 		echo "Updating resources as executable..."
-		find "$name.proapp" -name *.sh -depth -exec chmod +x {} \;
-		find "$name.proapp" -name *.sh.x -depth -exec rm {} \;
 	done
+
+	echo "Cleaning things up..."
+	echo "Removing .sh.x.c files."
+	find "$pth" -name *.sh.x.c -depth -exec rm {} \;
 	echo "Removing .x.c files."
 	find "$pth" -name *.x.c -depth -exec rm {} \;
+	echo "Removing .sh.x files."
+	find "$pth" -name *.sh.x -depth -exec rm {} \;
 	echo "Build complete."
 elif [[ "$1" == "norun" ]]; then
 	exit 0
